@@ -564,7 +564,9 @@ body {
       <h2 class="section-title">What's On</h2>
       <p class="section-body">Every Friday during school term. Here's what's coming up. <span style="opacity:0.5;">(next 4)</span></p>
     </div>
-
+    <div class="events-list" id="whats-on-list">
+      <div class="events-loading">Loading upcoming events...</div>
+    </div>
     <p style="font-size:0.82rem; color:var(--muted); margin-top:1.5rem;">
       Questions about a specific event? <a href="#contact" style="color:var(--green-glow); text-decoration:none;">Hit us up</a>
     </p>
@@ -577,32 +579,39 @@ body {
     <div class="reveal">
       <span class="section-tag">Don't Miss Out</span>
       <h2 class="section-title">Events</h2>
-      <p class="section-body">Camps, special nights and big events beyond the regular Friday rhythm. Register early spots go fast.</p>
+      <p class="section-body">Camps, special nights and big events. Keep an eye on this space.</p>
     </div>
+
     <div class="major-events">
+
+      <!-- CAMP CARD — update manually each year once branding launches -->
       <div class="major-card reveal">
-        <div class="major-card-img"><span class="major-card-img-label">📸 Add event photo</span></div>
+        <div style="background:var(--dark2);height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:0.75rem;border-bottom:1px solid rgba(255,255,255,0.05);position:relative;overflow:hidden;">
+          <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,transparent,transparent 20px,rgba(76,175,135,0.03) 20px,rgba(76,175,135,0.03) 40px);"></div>
+          <div style="font-family:var(--font-head);font-size:3.5rem;color:var(--green-mid);line-height:1;position:relative;z-index:1;">?</div>
+          <div style="font-family:var(--font-cond);font-size:0.65rem;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;color:var(--muted);position:relative;z-index:1;">More details coming soon</div>
+        </div>
         <div class="major-card-body">
-          <span class="major-card-tag">Camp</span>
-          <div class="major-card-title">Youth Camp 2025</div>
-          <span class="major-card-date">Date TBA · Term 3</span>
-          <div class="major-card-desc">Days away together worship, community, God moments. One of the highlights of the year.</div>
-          <a href="#contact" class="btn-primary" style="margin-top:1.25rem; display:inline-block;">Find Out More</a>
+          <span class="major-card-tag">Camp 2026</span>
+          <div class="major-card-title">DC Youth Camp</div>
+          <span class="major-card-date">28 Sep – 2 Oct 2026 &nbsp;·&nbsp; Mon to Fri</span>
+          <div class="major-card-desc" style="margin-top:0.75rem;">Camp is coming. Save the dates — 28 September to 2 October. Everything else is on its way. Follow <a href="https://www.instagram.com/dcyouth__/" target="_blank" style="color:var(--green-glow);text-decoration:none;">@dcyouth__</a> for the full launch.</div>
+          <a href="#contact" class="btn-primary" style="margin-top:1.25rem;display:inline-block;">Register Interest</a>
         </div>
       </div>
-      <div class="major-card reveal">
-        <div class="major-card-img"><span class="major-card-img-label">📸 Add event photo</span></div>
-        <div class="major-card-body">
-          <span class="major-card-tag">Special Night</span>
-          <div class="major-card-title">Coming Soon</div>
-          <span class="major-card-date">Date TBA</span>
-          <div class="major-card-desc">Something big is in the works. Follow <a href="https://www.instagram.com/dcyouth__/" target="_blank" style="color:var(--green-glow); text-decoration:none;">@dcyouth__</a> for the announcement.</div>
-        </div>
+
+      <!-- DYNAMIC EVENTS FROM ZEAL -->
+      <div id="events-list">
+        <div class="events-loading">Loading events...</div>
       </div>
+
+    </div>
+
+    <div id="no-events" style="display:none;margin-top:2rem;">
+      <p style="font-size:0.95rem;color:var(--muted);line-height:1.7;">No other events scheduled right now. Follow <a href="https://www.instagram.com/dcyouth__/" target="_blank" style="color:var(--green-glow);text-decoration:none;">@dcyouth__</a> for announcements.</p>
     </div>
   </div>
 </section>
-
 
 
 <!-- ── CONTACT ── -->
