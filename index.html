@@ -129,13 +129,64 @@ body {
 }
 .hero h1 {
   font-family: var(--font-head);
-  font-size: clamp(4.5rem, 20vw, 13rem);
-  line-height: 0.88;
+  font-size: clamp(6rem, 28vw, 18rem);
+  line-height: 0.85;
   letter-spacing: 0.02em;
   color: var(--white);
   opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
 }
-.hero h1 span { color: #2A7A58; }
+.hero h1 .dc-text {
+  display: block;
+  color: var(--white);
+  position: relative;
+  line-height: 0.85;
+  margin-bottom: 0;
+}
+.hero h1 .youth-text {
+  display: block;
+  color: #2A7A58;
+  position: relative;
+  animation: fadeUp 0.8s 0.5s both;
+}
+
+.hero-orb {
+  position: absolute;
+  width: 700px; height: 700px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(42,122,88,0.28) 0%, rgba(13,61,46,0.15) 40%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: orbPulse 3.5s ease-in-out infinite;
+  pointer-events: none;
+}
+.hero-orb::before {
+  content: '';
+  position: absolute;
+  inset: -100px;
+  border-radius: 50%;
+  border: 1px solid rgba(42,122,88,0.15);
+  animation: orbRing 3.5s ease-in-out infinite;
+}
+.hero-orb::after {
+  content: '';
+  position: absolute;
+  inset: -200px;
+  border-radius: 50%;
+  border: 1px solid rgba(42,122,88,0.08);
+  animation: orbRing 3.5s ease-in-out 0.5s infinite;
+}
+@keyframes orbPulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.7; }
+  50% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+}
+@keyframes orbRing {
+  0%, 100% { transform: scale(1); opacity: 0.6; }
+  50% { transform: scale(1.15); opacity: 1; }
+}
+@keyframes gridMove {
+  0% { background-position: 0 0; }
+  100% { background-position: 60px 60px; }
+}
 .hero-vision {
   font-size: clamp(1.05rem, 3vw, 1.3rem);
   color: var(--text);
@@ -418,8 +469,9 @@ body {
 <section class="hero" id="home">
   <div class="hero-bg"></div>
   <div class="hero-grid"></div>
+  <div class="hero-orb"></div>
   <div class="hero-tag">Dream Centre Church · Gold Coast</div>
-  <h1>DC<br><span>YOUTH</span></h1>
+  <h1>DC<span class="youth-text">YOUTH</span></h1>
   <p class="hero-vision">A generation on fire for Jesus.</p>
   <p class="hero-who">Years 7 to 12 &nbsp;·&nbsp; Every Friday during school term</p>
   <div class="hero-actions">
