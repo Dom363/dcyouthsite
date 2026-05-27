@@ -748,7 +748,8 @@ body {
             }
           });
         } else {
-          alert('Something went wrong. Please try again.');
+          const errMsg = data.error || 'Something went wrong. Please try again.';
+          alert(errMsg + (data.fieldErrors ? '\n\nFields: ' + JSON.stringify(data.fieldErrors) : ''));
         }
       }
     } catch(err) {
