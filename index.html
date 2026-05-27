@@ -648,14 +648,14 @@ body {
         <div class="contact-form">
           <form id="contactForm" onsubmit="handleSubmit(event)">
             <div class="form-row">
-              <div class="form-group"><label>First Name</label><input type="text" placeholder="Jordan" required></div>
-              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+              <div class="form-group"><label>First Name</label><input type="text" name="firstName" placeholder="Jordan" required></div>
+              <div class="form-group"><label>Last Name</label><input type="text" name="lastName" placeholder="Smith"></div>
             </div>
-            <div class="form-group"><label>Email Address</label><input type="email" placeholder="jordan@email.com" required></div>
-            <div class="form-group"><label>Phone (optional)</label><input type="tel" placeholder="04xx xxx xxx"></div>
+            <div class="form-group"><label>Email Address</label><input type="email" name="email" placeholder="jordan@email.com" required></div>
+            <div class="form-group"><label>Phone (optional)</label><input type="tel" name="phone" placeholder="04xx xxx xxx"></div>
             <div class="form-group">
               <label>I am a...</label>
-              <select>
+              <select name="enquiryType">
                 <option value="">Select one</option>
                 <option>Young person wanting to come along</option>
                 <option>Parent wanting more info</option>
@@ -663,7 +663,7 @@ body {
                 <option>Just curious</option>
               </select>
             </div>
-            <div class="form-group"><label>Message or Question</label><textarea placeholder="What would you like to know?"></textarea></div>
+            <div class="form-group"><label>Message or Question</label><textarea name="message" placeholder="What would you like to know?"></textarea></div>
             <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
           </form>
           <div class="form-success" id="formSuccess">
@@ -705,15 +705,58 @@ body {
   reveals.forEach(el => observer.observe(el));
 
   // Form submit
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
     btn.textContent = 'Sending...';
     btn.disabled = true;
-    setTimeout(() => {
-      document.getElementById('contactForm').style.display = 'none';
-      document.getElementById('formSuccess').style.display = 'block';
-    }, 800);
+
+    const form = document.getElementById('contactForm');
+    const formData = {
+      firstName:   form.querySelector('[name="firstName"]').value.trim(),
+      lastName:    form.querySelector('[name="lastName"]').value.trim(),
+      email:       form.querySelector('[name="email"]').value.trim(),
+      phone:       form.querySelector('[name="phone"]').value.trim(),
+      enquiryType: form.querySelector('[name="enquiryType"]').value,
+      message:     form.querySelector('[name="message"]').value.trim()
+    };
+
+    try {
+      const res = await fetch('https://zeal-iota-cyan.vercel.app/api/public/youth-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
+      const data = await res.json();
+
+      if (data.ok) {
+        form.style.display = 'none';
+        document.getElementById('formSuccess').style.display = 'block';
+      } else {
+        // Show field errors if returned
+        btn.textContent = 'Send Message';
+        btn.disabled = false;
+        if (data.fieldErrors) {
+          Object.entries(data.fieldErrors).forEach(([field, msg]) => {
+            const input = form.querySelector(`[name="${field}"]`);
+            if (input) {
+              input.style.borderColor = '#EF4444';
+              const err = document.createElement('span');
+              err.style.cssText = 'color:#EF4444;font-size:0.75rem;margin-top:0.25rem;display:block;';
+              err.textContent = msg;
+              input.parentNode.appendChild(err);
+            }
+          });
+        } else {
+          alert('Something went wrong. Please try again.');
+        }
+      }
+    } catch(err) {
+      console.error('Form error:', err);
+      btn.textContent = 'Send Message';
+      btn.disabled = false;
+      alert('Unable to send message. Please try again or email us at dcyouth@dc.church');
+    }
   }
 
   // Smooth scroll for nav links
