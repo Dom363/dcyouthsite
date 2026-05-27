@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DC Youth | Dream Centre Church</title>
+<meta name="description" content="DC Youth — a generation on fire for Jesus. Years 7-12, every Friday night during school term at Dream Centre Church, Gold Coast.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&family=Barlow+Condensed:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+/* ── RESET ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* ── VARIABLES ── */
+:root {
+  --green:      #0D3D2E;
+  --green-mid:  #145C44;
+  --green-glow: #4CAF87;
+  --green-pale: rgba(168,213,194,0.9);
+  --dark:       #0C0C0C;
+  --dark2:      #111111;
+  --dark3:      #1A1A1A;
+  --text:       #F0F0F0;
+  --muted:      #888888;
+  --white:      #FFFFFF;
+  --font-head:  'Bebas Neue', sans-serif;
+  --font-body:  'Barlow', sans-serif;
+  --font-cond:  'Barlow Condensed', sans-serif;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--dark);
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+/* ── SITE NAV ── */
+.site-nav {
+  background: #000;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  padding: 0 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 52px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.site-nav-logo {
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.site-nav-logo:hover { color: var(--text); }
+.site-nav-logo span { color: var(--green-glow); }
+.site-nav-links {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+.site-nav-links a {
+  font-family: var(--font-cond);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.site-nav-links a:hover { color: var(--green-glow); }
+.site-nav-links .nav-back {
+  color: var(--green-glow);
+  border: 1px solid rgba(76,175,135,0.3);
+  padding: 5px 12px;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.site-nav-links .nav-back:hover { background: rgba(76,175,135,0.1); color: var(--green-glow); }
+
+/* ── HERO ── */
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 5rem 2rem 4rem;
+  overflow: hidden;
+}
+.hero-bg {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 70% 50% at 50% 0%, rgba(13,61,46,0.25) 0%, transparent 60%);
+  pointer-events: none;
+}
+.hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(76,175,135,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(76,175,135,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  pointer-events: none;
+}
+.hero-tag {
+  display: inline-block;
+  background: var(--green);
+  color: var(--green-pale);
+  font-family: var(--font-cond);
+  font-weight: 700; font-size: 0.7rem;
+  letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 6px 18px; border-radius: 2px;
+  border: 1px solid rgba(76,175,135,0.25);
+  margin-bottom: 1.5rem;
+  opacity: 0; animation: fadeUp 0.6s 0.2s forwards;
+}
+.hero h1 {
+  font-family: var(--font-head);
+  font-size: clamp(4.5rem, 20vw, 13rem);
+  line-height: 0.88;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero h1 span { color: var(--green-glow); }
+.hero-vision {
+  font-size: clamp(1.05rem, 3vw, 1.3rem);
+  color: var(--text);
+  font-weight: 500;
+  margin-top: 1.75rem;
+  opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+}
+.hero-who {
+  font-family: var(--font-cond);
+  font-size: clamp(0.85rem, 2vw, 1rem);
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-top: 0.6rem;
+  opacity: 0; animation: fadeUp 0.8s 0.7s forwards;
+}
+.hero-actions {
+  display: flex; gap: 1rem; margin-top: 2.5rem;
+  flex-wrap: wrap; justify-content: center;
+  opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+}
+
+/* ── BUTTONS ── */
+.btn-primary {
+  background: var(--green); color: var(--green-pale);
+  font-family: var(--font-cond); font-weight: 700; font-size: 0.95rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 13px 32px; border-radius: 3px;
+  border: 1px solid var(--green-mid);
+  cursor: pointer; text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+  display: inline-block;
+}
+.btn-primary:hover { background: var(--green-mid); transform: translateY(-2px); }
+.btn-outline {
+  background: transparent; color: var(--text);
+  font-family: var(--font-cond); font-weight: 700; font-size: 0.95rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 13px 32px; border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.18);
+  cursor: pointer; text-decoration: none;
+  transition: border-color 0.15s, color 0.15s;
+  display: inline-block;
+}
+.btn-outline:hover { border-color: var(--green-glow); color: var(--green-glow); }
+
+/* ── STATS BAR ── */
+.stats-bar {
+  background: var(--dark2);
+  border-top: 3px solid var(--green);
+  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 1rem 2rem;
+  display: flex; justify-content: center; flex-wrap: wrap;
+}
+.stat-item {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 0.6rem 2.5rem;
+  border-right: 1px solid rgba(255,255,255,0.07);
+}
+.stat-item:last-child { border-right: none; }
+.stat-number { font-family: var(--font-head); font-size: 2.2rem; color: var(--white); line-height: 1; }
+.stat-label { font-family: var(--font-cond); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 2px; }
+
+/* ── SECTION BASE ── */
+.section { padding: 5.5rem 2rem; }
+.section.dark2 { background: var(--dark2); }
+.container { max-width: 1100px; margin: 0 auto; }
+.section-tag { font-family: var(--font-cond); font-weight: 700; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-glow); margin-bottom: 0.75rem; display: block; }
+.section-title { font-family: var(--font-head); font-size: clamp(2.5rem, 7vw, 4.5rem); line-height: 1; color: var(--white); margin-bottom: 1rem; }
+.section-body { font-size: 1.05rem; line-height: 1.75; color: var(--muted); max-width: 560px; }
+
+/* ── HEART ── */
+.heart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.heart-circle {
+  width: 100%; aspect-ratio: 1; border-radius: 50%;
+  background: var(--dark3); border: 1px solid rgba(76,175,135,0.12);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; max-width: 400px;
+}
+.heart-circle::before { content: ''; position: absolute; inset: -20%; background: radial-gradient(circle at center, rgba(13,61,46,0.25) 0%, transparent 65%); }
+.heart-quote { font-family: var(--font-head); font-size: clamp(1.3rem, 3.5vw, 2.1rem); line-height: 1.15; text-align: center; padding: 2.5rem; color: var(--white); position: relative; z-index: 1; }
+.heart-quote span { color: var(--green-glow); }
+.pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 2.5rem; }
+.pillar { background: var(--dark3); border: 1px solid rgba(255,255,255,0.05); border-left: 3px solid var(--green); border-radius: 3px; padding: 1.2rem; transition: border-left-color 0.2s; }
+.pillar:hover { border-left-color: var(--green-glow); }
+.pillar-icon { font-size: 1.4rem; margin-bottom: 0.5rem; }
+.pillar h4 { font-family: var(--font-cond); font-weight: 700; font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green-glow); margin-bottom: 0.3rem; }
+.pillar p { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+
+/* ── INFO CARDS ── */
+.info-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.info-card { background: var(--dark3); border: 1px solid rgba(255,255,255,0.05); border-top: 3px solid var(--green); border-radius: 3px; padding: 2rem 1.5rem; }
+.info-card-label { font-family: var(--font-cond); font-weight: 700; font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green-glow); margin-bottom: 0.75rem; display: block; }
+.info-card h3 { font-family: var(--font-head); font-size: 1.9rem; color: var(--white); line-height: 1; margin-bottom: 0.5rem; }
+.info-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+/* ── PHOTO STRIP ── */
+.photo-strip { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 6px; }
+.photo-slot {
+  background: var(--dark3);
+  border: 1px dashed rgba(76,175,135,0.2);
+  border-radius: 3px;
+  aspect-ratio: unset;
+  height: 260px;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 0.4rem; overflow: hidden; position: relative;
+}
+.photo-slot img { width: 100%; height: 100%; object-fit: cover; position: absolute; inset: 0; }
+.photo-slot-label { font-family: var(--font-cond); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green-glow); opacity: 0.5; text-align: center; padding: 0 1rem; position: relative; z-index: 1; }
+
+/* ── NIGHT TYPES ── */
+.night-types { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin: 3rem 0; }
+.night-card { background: var(--dark3); border: 1px solid rgba(255,255,255,0.05); border-top: 3px solid var(--green); border-radius: 3px; padding: 1.75rem 1.5rem; transition: border-top-color 0.2s; }
+.night-card:hover { border-top-color: var(--green-glow); }
+.night-name { font-family: var(--font-head); font-size: 2.5rem; color: var(--white); line-height: 1; margin-bottom: 0.5rem; }
+.night-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+/* ── EVENTS LIST ── */
+.upcoming-label { font-family: var(--font-cond); font-weight: 700; font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-glow); margin-bottom: 1.25rem; display: block; margin-top: 3rem; }
+.events-list { display: flex; flex-direction: column; }
+.event-row { display: grid; grid-template-columns: 72px 1fr auto; align-items: center; gap: 1.5rem; padding: 1.25rem 0.5rem; border-bottom: 1px solid rgba(255,255,255,0.05); border-radius: 3px; transition: background 0.2s, padding-left 0.2s; }
+.event-row:hover { background: rgba(255,255,255,0.02); padding-left: 0.75rem; }
+.event-date { text-align: center; background: var(--dark3); border: 1px solid rgba(76,175,135,0.12); border-radius: 4px; padding: 0.6rem 0.4rem; }
+.event-day { font-family: var(--font-head); font-size: 1.8rem; line-height: 1; color: var(--green-glow); }
+.event-month { font-family: var(--font-cond); font-size: 0.6rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); }
+.event-info h4 { font-weight: 700; font-size: 1rem; color: var(--white); margin-bottom: 0.2rem; }
+.event-info p { font-size: 0.82rem; color: var(--muted); }
+.event-badge { font-family: var(--font-cond); font-weight: 700; font-size: 0.6rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 5px 12px; border-radius: 2px; white-space: nowrap; }
+.event-badge.weekly { background: rgba(13,61,46,0.5); color: rgba(168,213,194,0.9); border: 1px solid rgba(76,175,135,0.2); }
+.event-badge.special { background: rgba(80,100,200,0.15); color: #A0B8FF; border: 1px solid rgba(80,100,200,0.25); }
+.event-badge.camp { background: rgba(180,100,40,0.2); color: #FFAA70; border: 1px solid rgba(180,100,40,0.3); }
+
+/* ── MAJOR EVENTS ── */
+.major-events { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.major-card { background: var(--dark3); border: 1px solid rgba(255,255,255,0.05); border-radius: 4px; overflow: hidden; transition: transform 0.2s; }
+.major-card:hover { transform: translateY(-3px); }
+.major-card-img { width: 100%; height: 180px; background: var(--dark2); display: flex; align-items: center; justify-content: center; border-bottom: 1px solid rgba(255,255,255,0.05); }
+.major-card-img-label { font-family: var(--font-cond); font-size: 0.65rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green-glow); opacity: 0.5; }
+.major-card-body { padding: 1.5rem; }
+.major-card-tag { font-family: var(--font-cond); font-weight: 700; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green-glow); margin-bottom: 0.4rem; display: block; }
+.major-card-title { font-family: var(--font-head); font-size: 2rem; color: var(--white); line-height: 1; margin-bottom: 0.4rem; }
+.major-card-date { font-family: var(--font-cond); font-size: 0.8rem; color: var(--muted); margin-bottom: 0.75rem; display: block; }
+.major-card-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+/* ── TEAM ── */
+.team-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.team-card { display: flex; flex-direction: column; align-items: center; text-align: center; }
+.team-photo { width: 100%; aspect-ratio: 1; border-radius: 4px; margin-bottom: 1rem; background: var(--dark3); border: 1px dashed rgba(76,175,135,0.2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.team-photo img { width: 100%; height: 100%; object-fit: cover; }
+.team-photo-label { font-family: var(--font-cond); font-size: 0.62rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--green-glow); opacity: 0.5; }
+.team-name { font-weight: 700; font-size: 1rem; color: var(--white); margin-bottom: 0.2rem; }
+.team-role { font-family: var(--font-cond); font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green-glow); }
+
+/* ── INSTAGRAM ── */
+.insta-section { background: var(--dark2); }
+.insta-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem; }
+.insta-handle { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; }
+.insta-handle-icon { width: 40px; height: 40px; border-radius: 10px; background: linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); display: flex; align-items: center; justify-content: center; font-size: 1.2rem; flex-shrink: 0; }
+.insta-handle-text { display: flex; flex-direction: column; }
+.insta-handle-name { font-weight: 700; font-size: 1rem; color: var(--white); line-height: 1; }
+.insta-handle-sub { font-size: 0.8rem; color: var(--muted); }
+.insta-follow-btn { background: var(--green); color: var(--green-pale); font-family: var(--font-cond); font-weight: 700; font-size: 0.82rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 10px 22px; border-radius: 3px; border: 1px solid var(--green-mid); text-decoration: none; transition: background 0.2s; }
+.insta-follow-btn:hover { background: var(--green-mid); }
+/* Behold widget container */
+.insta-feed { min-height: 300px; }
+
+/* ── CONTACT ── */
+.contact-grid { display: grid; grid-template-columns: 1fr 1.4fr; gap: 5rem; align-items: start; }
+.contact-detail { display: flex; flex-direction: column; gap: 1.5rem; margin-top: 2rem; }
+.contact-item { display: flex; flex-direction: column; gap: 0.25rem; }
+.contact-item-label { font-family: var(--font-cond); font-weight: 700; font-size: 0.62rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--green-glow); }
+.contact-item-value { font-size: 1rem; color: var(--text); font-weight: 500; }
+.contact-item-value a { color: var(--green-glow); text-decoration: none; }
+.contact-form { background: var(--dark3); border: 1px solid rgba(255,255,255,0.06); border-radius: 4px; padding: 2.5rem; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.form-group { display: flex; flex-direction: column; gap: 0.4rem; margin-bottom: 1rem; }
+.form-group label { font-family: var(--font-cond); font-weight: 700; font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+.form-group input,
+.form-group select,
+.form-group textarea { background: var(--dark2); border: 1px solid rgba(255,255,255,0.08); border-radius: 3px; padding: 12px 14px; color: var(--text); font-family: var(--font-body); font-size: 0.95rem; outline: none; transition: border-color 0.15s; width: 100%; }
+.form-group input::placeholder,
+.form-group textarea::placeholder { color: rgba(255,255,255,0.2); }
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus { border-color: var(--green-mid); }
+.form-group select { appearance: none; cursor: pointer; }
+.form-group select option { background: var(--dark2); }
+.form-group textarea { resize: vertical; min-height: 100px; }
+.form-submit { width: 100%; background: var(--green); color: var(--green-pale); font-family: var(--font-cond); font-weight: 700; font-size: 1rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px; border: 1px solid var(--green-mid); border-radius: 3px; cursor: pointer; margin-top: 0.5rem; transition: background 0.2s, transform 0.15s; }
+.form-submit:hover { background: var(--green-mid); transform: translateY(-1px); }
+.form-success { display: none; text-align: center; padding: 2.5rem 1rem; }
+.form-success-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.form-success h3 { font-family: var(--font-head); font-size: 2.2rem; color: var(--green-glow); margin-bottom: 0.5rem; }
+.form-success p { color: var(--muted); line-height: 1.7; }
+
+/* ── FOOTER ── */
+.site-footer { background: #000; border-top: 1px solid rgba(255,255,255,0.05); padding: 3rem 2rem; text-align: center; }
+.footer-logo { font-family: var(--font-head); font-size: 2rem; color: var(--white); margin-bottom: 0.4rem; }
+.footer-logo span { color: var(--green-glow); }
+.footer-tagline { font-size: 0.85rem; color: var(--muted); margin-bottom: 1.5rem; }
+.footer-links { display: flex; justify-content: center; gap: 2rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+.footer-links a { color: var(--muted); text-decoration: none; font-family: var(--font-cond); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; transition: color 0.15s; }
+.footer-links a:hover { color: var(--green-glow); }
+.footer-copy { font-size: 0.75rem; color: rgba(255,255,255,0.2); }
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeIn { to { opacity: 1; } }
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 900px) {
+  .team-grid { grid-template-columns: repeat(2, 1fr); }
+  .photo-strip { grid-template-columns: 1fr 1fr; }
+  .photo-slot { height: 180px; }
+}
+@media (max-width: 768px) {
+  .site-nav-links { gap: 0.75rem; }
+  .site-nav-links a:not(.nav-back) { display: none; }
+  .hero { min-height: 95svh; padding: 4rem 1.5rem 3rem; }
+  .hero h1 { font-size: clamp(4rem, 22vw, 7rem); }
+  .section { padding: 3.5rem 1.25rem; }
+  .section-title { font-size: clamp(2rem, 9vw, 3rem); }
+  .heart-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .heart-circle { max-width: 260px; margin: 0 auto; }
+  .pillars { grid-template-columns: 1fr; gap: 0.75rem; }
+  .info-cards { grid-template-columns: 1fr; gap: 1rem; }
+  .night-types { grid-template-columns: 1fr; gap: 1rem; }
+  .major-events { grid-template-columns: 1fr; }
+  .contact-grid { grid-template-columns: 1fr; gap: 2.5rem; }
+  .form-row { grid-template-columns: 1fr; }
+  .stats-bar { justify-content: center; }
+  .stat-item { padding: 0.6rem 1.25rem; border-right: none; width: 50%; border-bottom: 1px solid rgba(255,255,255,0.05); }
+  .stat-item:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.07); }
+  .stat-item:nth-last-child(-n+2) { border-bottom: none; }
+  .photo-strip { grid-template-columns: 1fr 1fr; }
+  .event-row { grid-template-columns: 60px 1fr; }
+  .event-badge { display: none; }
+  .insta-header { flex-direction: column; align-items: flex-start; }
+  .team-grid { grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .hero-actions { gap: 0.75rem; }
+  .btn-primary, .btn-outline { padding: 12px 24px; font-size: 0.9rem; width: 100%; text-align: center; }
+}
+@media (max-width: 480px) {
+  .photo-strip { grid-template-columns: 1fr; }
+  .photo-slot { height: 220px; }
+  .team-grid { grid-template-columns: 1fr; max-width: 260px; margin-left: auto; margin-right: auto; }
+  .stat-item { width: 50%; }
+  .major-card-img { height: 150px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── SITE NAV ── -->
+<nav class="site-nav">
+  <a href="https://www.dc.church" class="site-nav-logo">DC <span>Church</span></a>
+  <div class="site-nav-links">
+    <a href="#heart">About</a>
+    <a href="#events">Events</a>
+    <a href="#team">Team</a>
+    <a href="#contact">Contact</a>
+    <a href="https://www.dc.church" class="nav-back">DC Church Site</a>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-tag">Dream Centre Church · Gold Coast</div>
+  <h1>DC<br><span>YOUTH</span></h1>
+  <p class="hero-vision">A generation on fire for Jesus.</p>
+  <p class="hero-who">Years 7 to 12 &nbsp;·&nbsp; Every Friday during school term</p>
+  <div class="hero-actions">
+    <a href="#contact" class="btn-primary">I Want In</a>
+    <a href="#heart" class="btn-outline">What We're About</a>
+  </div>
+</section>
+
+<!-- ── STATS BAR ── -->
+<div class="stats-bar">
+  <div class="stat-item"><div class="stat-number">Yrs 7–12</div><div class="stat-label">Who's Welcome</div></div>
+  <div class="stat-item"><div class="stat-number">FRI</div><div class="stat-label">Every Week</div></div>
+  <div class="stat-item"><div class="stat-number">6–8:30</div><div class="stat-label">PM School Term</div></div>
+  <div class="stat-item"><div class="stat-number">FREE</div><div class="stat-label">Entry</div></div>
+</div>
+
+<!-- ── HEART ── -->
+<section class="section dark2" id="heart">
+  <div class="container">
+    <div class="heart-grid">
+      <div class="reveal">
+        <div class="heart-circle">
+          <div class="heart-quote">"Encounter God.<br>Walk with Him<br><span>daily."</span></div>
+        </div>
+      </div>
+      <div class="reveal">
+        <span class="section-tag">Our Heart</span>
+        <h2 class="section-title">We Exist to<br>Lead Youth<br>to Jesus</h2>
+        <p class="section-body">We want to see a generation on fire for God — young people who don't just know about Jesus, but genuinely walk with Him every day.</p>
+        <p class="section-body" style="margin-top:1rem">DC Youth exists to cultivate a joy-filled, Christ-centred community and empower young people to live boldly for Him.</p>
+        <div class="pillars">
+          <div class="pillar"><div class="pillar-icon">🔥</div><h4>Fire</h4><p>A generation passionate about Jesus — not lukewarm, fully alive.</p></div>
+          <div class="pillar"><div class="pillar-icon">🙌</div><h4>Encounter</h4><p>Real moments with God. Worship and presence that goes deep.</p></div>
+          <div class="pillar"><div class="pillar-icon">🤝</div><h4>Community</h4><p>Joy-filled, genuine friendships. A place to truly belong.</p></div>
+          <div class="pillar"><div class="pillar-icon">⚡</div><h4>Boldness</h4><p>Young people empowered to live out their faith without apology.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INFO ── -->
+<section class="section" id="info">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">The Basics</span>
+      <h2 class="section-title">When, Where &amp; Who</h2>
+    </div>
+    <div class="info-cards">
+      <div class="info-card reveal">
+        <span class="info-card-label">When</span>
+        <h3>Fridays, 6–8:30pm</h3>
+        <p>Every Friday night during school term. Come at 6, we'll see you out at 8:30. No bookings needed — just show up.</p>
+      </div>
+      <div class="info-card reveal">
+        <span class="info-card-label">Where</span>
+        <h3>3 Chisholm Rd, Carrara</h3>
+        <p>Right here at Dream Centre Church on the Gold Coast. Easy to find, plenty of parking.</p>
+      </div>
+      <div class="info-card reveal">
+        <span class="info-card-label">Who</span>
+        <h3>Years 7 to 12</h3>
+        <p>Built for high schoolers. First time? You don't need to know anyone to walk through the door — you'll leave with friends.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PHOTO STRIP ── -->
+<div style="background:var(--dark2); padding: 0;">
+  <div class="photo-strip reveal">
+    <div class="photo-slot"><div class="photo-slot-label">📸 Add hero photo</div></div>
+    <div class="photo-slot"><div class="photo-slot-label">📷 Photo</div></div>
+    <div class="photo-slot"><div class="photo-slot-label">📷 Photo</div></div>
+    <div class="photo-slot"><div class="photo-slot-label">📷 Photo</div></div>
+  </div>
+</div>
+
+<!-- ── FRIDAY NIGHTS ── -->
+<section class="section" id="events">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">Every Friday Night</span>
+      <h2 class="section-title">DC Youth Nights</h2>
+      <p class="section-body">Every Friday during school term we run one of three nights. Each one is different.</p>
+    </div>
+    <div class="night-types reveal">
+      <div class="night-card">
+        <div class="night-name">Crew</div>
+        <div class="night-desc">Description coming — update this once confirmed with the youth team.</div>
+      </div>
+      <div class="night-card">
+        <div class="night-name">Preach</div>
+        <div class="night-desc">Description coming — update this once confirmed with the youth team.</div>
+      </div>
+      <div class="night-card">
+        <div class="night-name">Manic</div>
+        <div class="night-desc">Description coming — update this once confirmed with the youth team.</div>
+      </div>
+    </div>
+
+    <span class="upcoming-label">Coming Up This Term</span>
+    <div class="events-list reveal">
+      <div class="event-row">
+        <div class="event-date"><div class="event-day">06</div><div class="event-month">Jun</div></div>
+        <div class="event-info"><h4>DC Youth Friday Night</h4><p>6:00–8:30pm · 3 Chisholm Rd, Carrara</p></div>
+        <span class="event-badge weekly">Weekly</span>
+      </div>
+      <div class="event-row">
+        <div class="event-date"><div class="event-day">13</div><div class="event-month">Jun</div></div>
+        <div class="event-info"><h4>DC Youth Friday Night</h4><p>6:00–8:30pm · 3 Chisholm Rd, Carrara</p></div>
+        <span class="event-badge weekly">Weekly</span>
+      </div>
+      <div class="event-row">
+        <div class="event-date"><div class="event-day">20</div><div class="event-month">Jun</div></div>
+        <div class="event-info"><h4>Special Night — Details TBC</h4><p>Something big is coming. Stay tuned.</p></div>
+        <span class="event-badge special">Special</span>
+      </div>
+      <div class="event-row">
+        <div class="event-date"><div class="event-day">TBA</div><div class="event-month">Term 3</div></div>
+        <div class="event-info"><h4>Youth Camp 2025</h4><p>Annual camp — days away together. Register early, spots fill fast.</p></div>
+        <span class="event-badge camp">Camp</span>
+      </div>
+    </div>
+    <p style="font-size:0.82rem; color:var(--muted); margin-top:1.5rem;">
+      Questions about a specific event? <a href="#contact" style="color:var(--green-glow); text-decoration:none;">Hit us up</a>
+    </p>
+  </div>
+</section>
+
+<!-- ── MAJOR EVENTS ── -->
+<section class="section dark2" id="major-events">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">Don't Miss Out</span>
+      <h2 class="section-title">Major Events</h2>
+      <p class="section-body">Camps, special nights and big events beyond the regular Friday rhythm. Register early — spots go fast.</p>
+    </div>
+    <div class="major-events">
+      <div class="major-card reveal">
+        <div class="major-card-img"><span class="major-card-img-label">📸 Add event photo</span></div>
+        <div class="major-card-body">
+          <span class="major-card-tag">Camp</span>
+          <div class="major-card-title">Youth Camp 2025</div>
+          <span class="major-card-date">Date TBA · Term 3</span>
+          <div class="major-card-desc">Days away together — worship, community, God moments. One of the highlights of the year.</div>
+          <a href="#contact" class="btn-primary" style="margin-top:1.25rem; display:inline-block;">Register Interest</a>
+        </div>
+      </div>
+      <div class="major-card reveal">
+        <div class="major-card-img"><span class="major-card-img-label">📸 Add event photo</span></div>
+        <div class="major-card-body">
+          <span class="major-card-tag">Special Night</span>
+          <div class="major-card-title">Coming Soon</div>
+          <span class="major-card-date">Date TBA</span>
+          <div class="major-card-desc">Something big is in the works. Follow <a href="https://www.instagram.com/dcyouth__/" target="_blank" style="color:var(--green-glow); text-decoration:none;">@dcyouth__</a> for the announcement.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TEAM ── -->
+<section class="section" id="team">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">The Team</span>
+      <h2 class="section-title">Who We Are</h2>
+      <p class="section-body">Meet the people behind DC Youth — passionate about seeing this generation encounter God.</p>
+    </div>
+    <div class="team-grid reveal">
+      <div class="team-card">
+        <div class="team-photo"><div class="team-photo-label">📷 Headshot</div></div>
+        <div class="team-name">Team Member Name</div>
+        <div class="team-role">Youth Pastor</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><div class="team-photo-label">📷 Headshot</div></div>
+        <div class="team-name">Team Member Name</div>
+        <div class="team-role">Youth Leader</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><div class="team-photo-label">📷 Headshot</div></div>
+        <div class="team-name">Team Member Name</div>
+        <div class="team-role">Youth Leader</div>
+      </div>
+      <div class="team-card">
+        <div class="team-photo"><div class="team-photo-label">📷 Headshot</div></div>
+        <div class="team-name">Team Member Name</div>
+        <div class="team-role">Youth Leader</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── INSTAGRAM ── -->
+<section class="section insta-section" id="instagram">
+  <div class="container">
+    <div class="insta-header reveal">
+      <a href="https://www.instagram.com/dcyouth__/" target="_blank" class="insta-handle">
+        <div class="insta-handle-icon">📸</div>
+        <div class="insta-handle-text">
+          <span class="insta-handle-name">@dcyouth__</span>
+          <span class="insta-handle-sub">Follow us on Instagram</span>
+        </div>
+      </a>
+      <a href="https://www.instagram.com/dcyouth__/" target="_blank" class="insta-follow-btn">Follow @dcyouth__</a>
+    </div>
+    <!-- Behold Instagram widget — sign up free at behold.so, get your feed ID and replace below -->
+    <div class="insta-feed reveal">
+      <div id="behold-widget" style="background:var(--dark3); border:1px dashed rgba(76,175,135,0.2); border-radius:4px; padding:2rem; text-align:center;">
+        <p style="font-family:var(--font-cond); font-size:0.7rem; letter-spacing:0.15em; text-transform:uppercase; color:var(--green-glow); margin-bottom:0.5rem;">Instagram Feed</p>
+        <p style="font-size:0.85rem; color:var(--muted); line-height:1.6;">To show your Instagram feed here, sign up free at <a href="https://behold.so" target="_blank" style="color:var(--green-glow);">behold.so</a>, connect @dcyouth__, and replace this placeholder with their embed code.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTACT ── -->
+<section class="section" id="contact">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="reveal">
+        <span class="section-tag">Get Connected</span>
+        <h2 class="section-title">Ready to<br>Come Along?</h2>
+        <p class="section-body">Young person wanting to check it out? Parent with questions? Drop us a message.</p>
+        <div class="contact-detail">
+          <div class="contact-item">
+            <span class="contact-item-label">Fridays</span>
+            <span class="contact-item-value">6:00pm – 8:30pm (school term)</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item-label">Location</span>
+            <span class="contact-item-value">3 Chisholm Road, Carrara QLD 4211</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item-label">Phone</span>
+            <span class="contact-item-value"><a href="tel:0755969999">(07) 5596 9999</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item-label">Email</span>
+            <span class="contact-item-value"><a href="mailto:info@dc.church">info@dc.church</a></span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-item-label">Instagram</span>
+            <span class="contact-item-value"><a href="https://www.instagram.com/dcyouth__/" target="_blank">@dcyouth__</a></span>
+          </div>
+        </div>
+      </div>
+      <div class="reveal">
+        <div class="contact-form">
+          <form id="contactForm" onsubmit="handleSubmit(event)">
+            <div class="form-row">
+              <div class="form-group"><label>First Name</label><input type="text" placeholder="Jordan" required></div>
+              <div class="form-group"><label>Last Name</label><input type="text" placeholder="Smith"></div>
+            </div>
+            <div class="form-group"><label>Email Address</label><input type="email" placeholder="jordan@email.com" required></div>
+            <div class="form-group"><label>Phone (optional)</label><input type="tel" placeholder="04xx xxx xxx"></div>
+            <div class="form-group">
+              <label>I am a...</label>
+              <select>
+                <option value="">Select one</option>
+                <option>Young person wanting to come along</option>
+                <option>Parent wanting more info</option>
+                <option>Parent registering my child</option>
+                <option>Someone wanting to volunteer or lead</option>
+                <option>Just curious</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Message or Question</label><textarea placeholder="What would you like to know?"></textarea></div>
+            <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
+          </form>
+          <div class="form-success" id="formSuccess">
+            <div class="form-success-icon">🙌</div>
+            <h3>You're In!</h3>
+            <p>Thanks for reaching out — we'll be in touch soon.<br>See you Friday.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="site-footer">
+  <div class="footer-logo">DC <span>Youth</span></div>
+  <p class="footer-tagline">Part of Dream Centre Church, Gold Coast</p>
+  <div class="footer-links">
+    <a href="https://www.dc.church">DC Church Home</a>
+    <a href="https://www.dc.church/events">Events</a>
+    <a href="https://www.dc.church/giving">Giving</a>
+    <a href="https://www.instagram.com/dcyouth__/" target="_blank">Instagram</a>
+    <a href="https://www.facebook.com/dreamcentrechristianchurch/" target="_blank">Facebook</a>
+  </div>
+  <p class="footer-copy">2025 Dream Centre Church · 3 Chisholm Rd, Carrara QLD 4211</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.08 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    setTimeout(() => {
+      document.getElementById('contactForm').style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+    }, 800);
+  }
+
+  // Smooth scroll for nav links
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      e.preventDefault();
+      const t = document.querySelector(a.getAttribute('href'));
+      if (t) t.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+</body>
+</html>
