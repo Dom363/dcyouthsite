@@ -448,6 +448,53 @@ body {
 /* ── EVENTS LOADING ── */
 .events-loading { font-family: var(--font-cond); font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 2rem 0; }
 
+/* ── FAQ ── */
+.faq-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 2.5rem; }
+.faq-item {
+  background: var(--dark3);
+  border: 1px solid rgba(255,255,255,0.05);
+  border-left: 3px solid var(--green);
+  border-radius: 3px;
+  overflow: hidden;
+  transition: border-left-color 0.2s;
+}
+.faq-item[open] { border-left-color: var(--green-glow); }
+.faq-item summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 1.1rem 1.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  font-family: var(--font-cond);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+  color: var(--white);
+  transition: color 0.15s;
+}
+.faq-item summary::-webkit-details-marker { display: none; }
+.faq-item summary:hover { color: var(--green-glow); }
+.faq-item summary::after {
+  content: '+';
+  font-family: var(--font-head);
+  font-size: 1.6rem;
+  line-height: 1;
+  color: var(--green-glow);
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+.faq-item[open] summary::after { transform: rotate(45deg); }
+.faq-answer {
+  padding: 0 1.4rem 1.2rem;
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--muted);
+}
+.faq-answer a { color: var(--green-glow); text-decoration: none; }
+.faq-answer a:hover { text-decoration: underline; }
+
 /* ── RESPONSIVE ── */
 @media (max-width: 900px) {
   .team-grid { grid-template-columns: repeat(2, 1fr); }
@@ -500,6 +547,7 @@ body {
   <div class="site-nav-links">
     <a href="#heart">About</a>
     <a href="#events">Events</a>
+    <a href="#faq">FAQ</a>
     <a href="#contact">Contact</a>
   </div>
 </nav>
@@ -714,6 +762,76 @@ body {
 </section>
 
 
+<!-- ── FAQ ── -->
+<section class="section" id="faq">
+  <div class="container">
+    <div class="reveal">
+      <span class="section-tag">Got Questions?</span>
+      <h2 class="section-title">FAQ</h2>
+      <p class="section-body">The most common questions, answered. Can't find what you're looking for? <a href="#contact" style="color:var(--green-glow);text-decoration:none;">Reach out below</a>.</p>
+    </div>
+    <div class="faq-list reveal">
+
+      <details class="faq-item">
+        <summary>Who can come to DC Youth?</summary>
+        <div class="faq-answer">DC Youth is for high schoolers, years 7 to 12. If you're high-school-aged but not currently at school (homeschooled, doing a trade, between schools), you're still welcome. Just come along.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What happens on a typical Friday night?</summary>
+        <div class="faq-answer">Doors open at 6pm with food and time to hang. Around 6:30pm we all come together to kick the night off, then move into worship. After that it's either a message, small groups, or games depending on the night. Wraps up at 8:30pm.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How much does it cost?</summary>
+        <div class="faq-answer">Entry is free. Free food every week. We also have a café that sells lollies, soft drinks and a few other snacks for purchase if you want extras.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What should I bring?</summary>
+        <div class="faq-answer">Yourself. That's it. A few dollars to grab something from the café, and a Bible and notebook to take notes on the message.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What should I wear?</summary>
+        <div class="faq-answer">Whatever you'd wear to hang out with friends. Comfortable and modest is the rule of thumb. Heads up that some nights involve running around or messy games, so don't show up in something you'd be devastated to ruin.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What does drop-off and pickup look like?</summary>
+        <div class="faq-answer">Drop-off from 6pm at the front entrance of the church, 3 Chisholm Rd, Carrara. Sign in closes at 6:30pm, so don't be late. Night ends at 8:30pm. Pickup by 9pm at the latest.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Can my child get a lift to or from youth?</summary>
+        <div class="faq-answer">Yes. We organise lifts through our leaders. If you genuinely can't get a safe lift any other way, reach out through the contact form below or DM us on Instagram and we'll sort it. If you do have another option, please use that so we can focus on the young people who don't.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>What if I'm not religious or not sure about church?</summary>
+        <div class="faq-answer">You're welcome here. Seriously. You don't need to believe anything or know anything to walk through the door. Plenty of people come along curious, sceptical, or just for the friends. All we ask is that you give the worship and message moments their space and stay respectful of what's happening in the room.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Does youth still run if the weather's bad?</summary>
+        <div class="faq-answer">Yes. We're indoors, so rain or shine we're going ahead. The only time we'd cancel is for a major weather event, and we'd let everyone know on our Instagram if that happens.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>Do you run during school holidays?</summary>
+        <div class="faq-answer">DC Youth doesn't run during the school holidays, but we do often put on special events. Keep an eye on the Events section above, or follow <a href="https://www.instagram.com/dcyouth__/" target="_blank">@dcyouth__</a> on Instagram so you don't miss anything.</div>
+      </details>
+
+      <details class="faq-item">
+        <summary>How do I stay updated on what's happening?</summary>
+        <div class="faq-answer">Check the events on this site for what's coming up, and follow <a href="https://www.instagram.com/dcyouth__/" target="_blank">@dcyouth__</a> on Instagram for everything else.</div>
+      </details>
+
+    </div>
+  </div>
+</section>
+
+
 <!-- ── CONTACT ── -->
 <section class="section" id="contact">
   <div class="container">
@@ -721,7 +839,7 @@ body {
       <div class="reveal">
         <span class="section-tag">Get Connected</span>
         <h2 class="section-title">Ready to<br>Come Along?</h2>
-        <p class="section-body">Young person wanting to check it out? Parent with questions? Drop us a message.</p>
+        <p class="section-body">Just rock up Friday at 6pm. Feel free to let us know you're coming, or drop us a message if you've got questions.</p>
         <div class="contact-detail">
           <div class="contact-item">
             <span class="contact-item-label">Fridays</span>
