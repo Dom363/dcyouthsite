@@ -907,6 +907,13 @@ body {
         </div>`;
     }).join('');
     grid.insertAdjacentHTML('beforeend', html);
+    // Observe newly-injected .reveal cards so they fade in like the static ones
+    grid.querySelectorAll('.major-card.reveal:not(.visible)').forEach(el => {
+      if (!el.dataset.observed) {
+        observer.observe(el);
+        el.dataset.observed = '1';
+      }
+    });
   }
 
   // Add muted style for No Youth rows
