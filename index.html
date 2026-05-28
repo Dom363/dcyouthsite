@@ -148,6 +148,30 @@ body {
   position: relative;
   animation: fadeUp 0.8s 0.5s both;
 }
+/* RGB split ghosts for flicker — sit on top of the parent, invisible by default,
+   driven by CSS custom properties --rgb-x and --rgb-o (offset & opacity). */
+.hero h1 .dc-text::before,
+.hero h1 .dc-text::after,
+.hero h1 .youth-text::before,
+.hero h1 .youth-text::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0; left: 0;
+  width: 100%;
+  pointer-events: none;
+  opacity: var(--rgb-o, 0);
+  mix-blend-mode: screen;
+}
+.hero h1 .dc-text::before,
+.hero h1 .youth-text::before {
+  color: #ff2a4a;
+  transform: translateX(calc(var(--rgb-x, 0px) * -1));
+}
+.hero h1 .dc-text::after,
+.hero h1 .youth-text::after {
+  color: #00d4ff;
+  transform: translateX(var(--rgb-x, 0px));
+}
 
 .hero-orb {
   position: absolute;
@@ -489,10 +513,10 @@ body {
     <filter id="grain">
       <!-- Edge imperfection: low-freq + high octaves = patchy, varied irregularity (not uniform fuzz) -->
       <feTurbulence type="fractalNoise" baseFrequency="0.15" numOctaves="4" seed="5" stitchTiles="stitch" result="edgeNoise"/>
-      <feDisplacementMap in="SourceGraphic" in2="edgeNoise" scale="2" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feDisplacementMap id="grain-displace" in="SourceGraphic" in2="edgeNoise" scale="2" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
 
       <!-- Fine grain noise -->
-      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" stitchTiles="stitch" result="grainNoise"/>
+      <feTurbulence id="grain-noise-source" type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3" stitchTiles="stitch" result="grainNoise"/>
       <feColorMatrix in="grainNoise" values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0   0 0 0 0.32 0" result="grainColoured"/>
       <feComposite in="grainColoured" in2="displaced" operator="in" result="grainMasked"/>
 
@@ -509,7 +533,7 @@ body {
       </feMerge>
     </filter>
   </svg>
-  <h1><span class="dc-text">DC</span><span class="youth-text">YOUTH</span></h1>
+  <h1><span class="dc-text" data-text="DC">DC</span><span class="youth-text" data-text="YOUTH">YOUTH</span></h1>
   <p class="hero-vision">A generation on fire for Jesus</p>
   <p class="hero-who">Years 7 to 12 &nbsp;·&nbsp; Every Friday during school term</p>
   <div class="hero-actions">
@@ -982,6 +1006,195 @@ body {
       console.error('Failed to load events:', err);
       document.getElementById('whats-on-list').innerHTML = '<p style="color:var(--muted);font-size:0.9rem;">Unable to load events right now. Check back soon.</p>';
     });
+
+  // ── Hero wordmark: entrance, ambient grain shift, layered per-span glitches ──
+  (function heroEffects() {
+    const displace = document.getElementById('grain-displace');
+    const grainNoise = document.getElementById('grain-noise-source');
+    const h1 = document.querySelector('.hero h1');
+    const dcEl = h1 && h1.querySelector('.dc-text');
+    const youthEl = h1 && h1.querySelector('.youth-text');
+    if (!displace || !grainNoise || !h1 || !dcEl || !youthEl) return;
+
+    const setRGB = (el, x, o) => {
+      el.style.setProperty('--rgb-x', x + 'px');
+      el.style.setProperty('--rgb-o', o);
+    };
+
+    // ── Entrance: RGB ghosts spread → converge (applied to both halves together) ──
+    const ENTRANCE_DELAY = 400;
+    const ENTRANCE_DURATION = 1100;
+    const ENTRANCE_FROM_X = 18;
+    const ENTRANCE_FROM_O = 0.85;
+
+    setRGB(dcEl, ENTRANCE_FROM_X, ENTRANCE_FROM_O);
+    setRGB(youthEl, ENTRANCE_FROM_X, ENTRANCE_FROM_O);
+    let entranceDone = false;
+    setTimeout(() => {
+      const start = performance.now();
+      function entrance(now) {
+        const t = Math.min(1, (now - start) / ENTRANCE_DURATION);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const x = ENTRANCE_FROM_X * (1 - eased);
+        const o = ENTRANCE_FROM_O * (1 - eased);
+        setRGB(dcEl, x, o);
+        setRGB(youthEl, x, o);
+        if (t < 1) requestAnimationFrame(entrance);
+        else { entranceDone = true; setRGB(dcEl, 0, 0); setRGB(youthEl, 0, 0); }
+      }
+      requestAnimationFrame(entrance);
+    }, ENTRANCE_DELAY);
+
+    // ── Ambient: slow grain seed drift, throttled ──
+    let seed = 3;
+    setInterval(() => {
+      seed = (seed + 1) % 1000;
+      grainNoise.setAttribute('seed', seed);
+    }, 80);
+
+    // ── Per-span RGB-split flicker (with displacement spike on shared filter) ──
+    function rgbFlicker(el) {
+      const steps = [
+        { dur: 50,  scale: 8,  rgbX: 3,  rgbO: 0.55 },
+        { dur: 35,  scale: 4,  rgbX: 0,  rgbO: 0    },
+        { dur: 80,  scale: 14, rgbX: 7,  rgbO: 0.8  },
+        { dur: 40,  scale: 6,  rgbX: 2,  rgbO: 0.4  },
+        { dur: 60,  scale: 2,  rgbX: 0,  rgbO: 0    }
+      ];
+      let i = 0;
+      function next() {
+        if (i >= steps.length) {
+          displace.setAttribute('scale', 2);
+          setRGB(el, 0, 0);
+          return;
+        }
+        const s = steps[i++];
+        displace.setAttribute('scale', s.scale);
+        setRGB(el, s.rgbX, s.rgbO);
+        setTimeout(next, s.dur);
+      }
+      next();
+    }
+
+    // ── Per-span opacity+translate stutter (visually distinct from RGB flicker) ──
+    function opacityStutter(el) {
+      const dips = [
+        { dur: 50, op: 0.25, tx: 2  },
+        { dur: 40, op: 1,    tx: 0  },
+        { dur: 70, op: 0.4,  tx: -3 },
+        { dur: 35, op: 1,    tx: 0  },
+        { dur: 30, op: 0.15, tx: 4  },
+        { dur: 90, op: 1,    tx: 0  }
+      ];
+      let i = 0;
+      function next() {
+        if (i >= dips.length) {
+          el.style.opacity = '';
+          el.style.transform = '';
+          return;
+        }
+        const s = dips[i++];
+        el.style.opacity = s.op;
+        el.style.transform = `translateX(${s.tx}px)`;
+        setTimeout(next, s.dur);
+      }
+      next();
+    }
+
+    // ── 4 independent random schedulers, overlapping windows for organic chaos ──
+    // Schedulers respect a `quietUntil` timestamp so we can suppress regular glitches
+    // around the entrance and the one-time signature glitch.
+    let quietUntil = performance.now() + 999999; // long quiet during entrance
+    function scheduleLoop(fn, minMs, maxMs) {
+      const tick = () => {
+        const delay = minMs + Math.random() * (maxMs - minMs);
+        setTimeout(() => {
+          if (entranceDone && performance.now() >= quietUntil) fn();
+          tick();
+        }, delay);
+      };
+      tick();
+    }
+
+    scheduleLoop(() => rgbFlicker(dcEl),     10000, 17000);
+    scheduleLoop(() => rgbFlicker(youthEl),  8500,  15500);
+    scheduleLoop(() => opacityStutter(dcEl), 7500,  13000);
+    scheduleLoop(() => opacityStutter(youthEl), 6500, 12500);
+
+    // ── One-time signature glitch: compound all effects at peak intensity,
+    //    fires ~2s after entrance, staggered DC→YOUTH for a "wave" feel. ──
+    function signatureGlitch() {
+      // Stronger RGB+displacement sequence (peaks at scale 22, ghost offset 11)
+      const bigSteps = [
+        { dur: 55,  scale: 12, rgbX: 5,  rgbO: 0.7 },
+        { dur: 40,  scale: 6,  rgbX: 1,  rgbO: 0.2 },
+        { dur: 110, scale: 22, rgbX: 11, rgbO: 0.95 }, // peak
+        { dur: 50,  scale: 10, rgbX: 4,  rgbO: 0.55 },
+        { dur: 70,  scale: 14, rgbX: 6,  rgbO: 0.7 },  // secondary spike
+        { dur: 40,  scale: 5,  rgbX: 1,  rgbO: 0.3 },
+        { dur: 60,  scale: 2,  rgbX: 0,  rgbO: 0   }
+      ];
+      function runBigSteps(el, onDone) {
+        let i = 0;
+        function next() {
+          if (i >= bigSteps.length) {
+            displace.setAttribute('scale', 2);
+            setRGB(el, 0, 0);
+            if (onDone) onDone();
+            return;
+          }
+          const s = bigSteps[i++];
+          displace.setAttribute('scale', s.scale);
+          setRGB(el, s.rgbX, s.rgbO);
+          setTimeout(next, s.dur);
+        }
+        next();
+      }
+
+      // Stronger opacity stutter for the signature
+      const bigDips = [
+        { dur: 45, op: 0.15, tx: 4  },
+        { dur: 30, op: 1,    tx: 0  },
+        { dur: 60, op: 0.3,  tx: -5 },
+        { dur: 25, op: 1,    tx: 0  },
+        { dur: 40, op: 0.1,  tx: 6  },
+        { dur: 80, op: 1,    tx: 0  }
+      ];
+      function runBigDips(el) {
+        let i = 0;
+        function next() {
+          if (i >= bigDips.length) {
+            el.style.opacity = '';
+            el.style.transform = '';
+            return;
+          }
+          const s = bigDips[i++];
+          el.style.opacity = s.op;
+          el.style.transform = `translateX(${s.tx}px)`;
+          setTimeout(next, s.dur);
+        }
+        next();
+      }
+
+      // Stagger: DC fires now, YOUTH 110ms later → wave effect
+      runBigSteps(dcEl);
+      runBigDips(dcEl);
+      setTimeout(() => {
+        runBigSteps(youthEl, () => {
+          // After signature finishes, enforce 5s cool-down so it stands alone
+          quietUntil = performance.now() + 5000;
+        });
+        runBigDips(youthEl);
+      }, 110);
+    }
+
+    // Schedule the signature for ~2s after entrance completes
+    const SIGNATURE_DELAY_AFTER_ENTRANCE = 2000;
+    setTimeout(() => {
+      quietUntil = performance.now() + 99999; // suppress regular glitches around signature
+      signatureGlitch();
+    }, ENTRANCE_DELAY + ENTRANCE_DURATION + SIGNATURE_DELAY_AFTER_ENTRANCE);
+  })();
 </script>
 </body>
 </html>
