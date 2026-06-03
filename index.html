@@ -866,6 +866,11 @@ body {
       <div class="reveal">
         <div class="contact-form">
           <form id="contactForm" onsubmit="handleSubmit(event)">
+            <!-- Honeypot: hidden from real users, bots fill it in. Backend rejects if non-empty. -->
+            <div style="position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;" aria-hidden="true">
+              <label>Website (leave blank)</label>
+              <input type="text" name="website" tabindex="-1" autocomplete="off">
+            </div>
             <div class="form-row">
               <div class="form-group"><label>First Name</label><input type="text" name="firstName" placeholder="Jordan" required></div>
               <div class="form-group"><label>Last Name</label><input type="text" name="lastName" placeholder="Smith"></div>
@@ -927,17 +932,27 @@ body {
   async function handleSubmit(e) {
     e.preventDefault();
     const btn = document.getElementById('submitBtn');
+    const form = document.getElementById('contactForm');
+
+    // Honeypot check: if a bot filled the hidden field, silently fake success and bail.
+    const honeypot = form.querySelector('[name="website"]').value;
+    if (honeypot) {
+      form.style.display = 'none';
+      document.getElementById('formSuccess').style.display = 'block';
+      return;
+    }
+
     btn.textContent = 'Sending...';
     btn.disabled = true;
 
-    const form = document.getElementById('contactForm');
     const formData = {
       firstName:   form.querySelector('[name="firstName"]').value.trim(),
       lastName:    form.querySelector('[name="lastName"]').value.trim(),
       email:       form.querySelector('[name="email"]').value.trim(),
       phone:       form.querySelector('[name="phone"]').value.trim(),
       enquiryType: form.querySelector('[name="enquiryType"]').value,
-      message:     form.querySelector('[name="message"]').value.trim()
+      message:     form.querySelector('[name="message"]').value.trim(),
+      website:     honeypot
     };
 
     try {
