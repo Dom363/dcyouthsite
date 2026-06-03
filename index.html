@@ -1044,10 +1044,11 @@ body {
       const { day, month } = formatDate(ev.date);
       const badge = TYPE_BADGE[ev.type] || { label: ev.type, cls: 'weekly' };
       const colour = TYPE_COLOURS[ev.type] || { bg: 'rgba(255,255,255,0.06)', accent: '#888888' };
-      const desc = ev.description || TYPE_DESCRIPTIONS[ev.type] || '';
       const isNoYouth = ev.type === 'No Youth';
       const specialTypes = ['Event', 'Holiday Event', 'Camp', 'Youth Night'];
-      const headline = (specialTypes.includes(ev.type) && ev.title) ? ev.title : ev.type;
+      const isSpecial = specialTypes.includes(ev.type);
+      const desc = ev.description || (isSpecial ? '' : (TYPE_DESCRIPTIONS[ev.type] || ''));
+      const headline = (isSpecial && ev.title) ? ev.title : ev.type;
       return `
         <div class="event-row${isNoYouth ? ' event-row-muted' : ''}">
           <div class="event-date" style="background:${colour.bg};border-color:${colour.accent}33;">
@@ -1075,7 +1076,9 @@ body {
       const badge = TYPE_BADGE[ev.type] || { label: ev.type, cls: 'special' };
       const colour = TYPE_COLOURS[ev.type] || { bg: 'rgba(255,255,255,0.06)', accent: '#888888' };
       const headline = ev.title || ev.type;
-      const desc = ev.description || TYPE_DESCRIPTIONS[ev.type] || '';
+      const specialTypes = ['Event', 'Holiday Event', 'Camp', 'Youth Night'];
+      const isSpecial = specialTypes.includes(ev.type);
+      const desc = ev.description || (isSpecial ? '' : (TYPE_DESCRIPTIONS[ev.type] || ''));
       const header = ev.image
         ? `<div class="major-card-img" style="background:var(--dark2);">
              <img src="${ev.image}" alt="${headline}" loading="lazy" style="width:100%;height:100%;object-fit:cover;display:block;">
@@ -1090,8 +1093,7 @@ body {
             <span class="major-card-tag">${badge.label}</span>
             <div class="major-card-title">${headline}</div>
             <span class="major-card-date">${day} ${month}</span>
-            <div class="major-card-desc" style="margin-top:0.5rem;">${desc}</div>
-            <a href="#contact" class="btn-primary" style="margin-top:1.25rem;display:inline-block;">Find Out More</a>
+            ${desc ? `<div class="major-card-desc" style="margin-top:0.5rem;">${desc}</div>` : ''}
           </div>
         </div>`;
     }).join('');
