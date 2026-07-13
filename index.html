@@ -956,7 +956,7 @@ body {
     };
 
     try {
-      const res = await fetch('https://zeal-iota-cyan.vercel.app/api/public/youth-contact', {
+      const res = await fetch('https://zeal.dc.church/api/public/youth-contact', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)
@@ -1004,7 +1004,7 @@ body {
   });
 
   // ── Zeal Events Feed ──
-  const ZEAL_URL = 'https://zeal-iota-cyan.vercel.app/api/public/youth-events';
+  const ZEAL_URL = 'https://zeal.dc.church/api/public/youth-events';
 
   const TYPE_DESCRIPTIONS = {
     'Crew Night': 'Dedicated small group time — connect with your crew, go deeper, do life together.',
@@ -1127,7 +1127,7 @@ body {
   noYouthStyle.textContent = '.event-row-muted { opacity: 0.45; } .event-badge.noyouth { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid rgba(255,255,255,0.1); }';
   document.head.appendChild(noYouthStyle);
 
-  fetch('https://zeal-iota-cyan.vercel.app/api/public/youth-events', {
+  fetch('https://zeal.dc.church/api/public/youth-events', {
     method: 'GET',
     headers: { 'Accept': 'application/json' },
     mode: 'cors'
