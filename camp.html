@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en-AU">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kingdom Camp 2026 | DC Youth</title>
+<meta name="description" content="Kingdom Camp 2026. DC Youth's annual camp for Years 7-12. 28 September to 2 October at Bornhoffen, Natural Bridge. Accommodation, meals, activities and transport included.">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="DC Youth">
+<meta property="og:title" content="Kingdom Camp 2026 | DC Youth">
+<meta property="og:description" content="His Kingdom is where we call home. DC Youth camp for Years 7-12. 28 Sept to 2 Oct at Bornhoffen, Natural Bridge.">
+<meta property="og:url" content="https://dcyouth.dc.church/camp">
+<meta property="og:image" content="https://dcyouth.dc.church/kingdom-banner.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Kingdom Camp 2026 | DC Youth">
+<meta name="twitter:description" content="His Kingdom is where we call home. DC Youth camp for Years 7-12.">
+<meta name="twitter:image" content="https://dcyouth.dc.church/kingdom-banner.jpg">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --midnight: #14212e;
+    --deep-blue: #1b2d3f;
+    --slate: #2d4356;
+    --steel: #4a6478;
+    --haze: #6b8499;
+    --parchment: #e8e0cd;
+    --cream: #f5efe0;
+    --gold: #c9a24b;
+    --gold-bright: #e0b95e;
+    --gold-deep: #a5822f;
+
+    --font-display: 'Cinzel', serif;
+    --font-cond: 'Barlow Condensed', sans-serif;
+    --font-body: 'Barlow', sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font-body);
+    background: var(--midnight);
+    color: var(--parchment);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* Page-wide atmospheric backdrop: the Kingdom valley, blurred and darkened, behind everything */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: -40px;
+    background-image: url('kingdom-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    filter: blur(18px) brightness(0.4) saturate(1.1);
+    transform: scale(1.08);
+    z-index: -2;
+    pointer-events: none;
+  }
+  /* A colour wash on top of the blurred photo to unify the palette and deepen it */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 20%, rgba(74,100,120,0.15) 0%, transparent 55%),
+      linear-gradient(180deg, rgba(20,33,46,0.5) 0%, rgba(14,23,32,0.72) 50%, rgba(11,18,25,0.85) 100%);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ── NAV ── */
+  .nav {
+    position: sticky; top: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 2rem; height: 56px;
+    background: rgba(14,23,32,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(201,162,75,0.18);
+  }
+  .nav-back {
+    display: flex; align-items: center; gap: 10px;
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.8rem; letter-spacing: 0.18em; text-transform: uppercase;
+    color: rgba(232,224,205,0.7); transition: color 0.15s;
+  }
+  .nav-back:hover { color: var(--cream); }
+  .nav-cta {
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.78rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--midnight); background: var(--gold);
+    padding: 0.55rem 1.3rem; border-radius: 2px;
+    transition: background 0.15s;
+  }
+  .nav-cta:hover { background: var(--gold-bright); }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 92vh;
+    min-height: 92svh;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    padding: 3rem 1.5rem 4rem;
+    overflow: hidden;
+  }
+  .hero-banner {
+    position: absolute; inset: 0;
+    background-image: url('kingdom-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    z-index: -1;
+  }
+  /* Fog that fades the banner into the page below */
+  .hero-banner::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, rgba(20,33,46,0.1) 0%, rgba(20,33,46,0.2) 50%, rgba(20,33,46,0.75) 85%, var(--midnight) 100%),
+      radial-gradient(ellipse 55% 45% at 50% 42%, rgba(20,33,46,0.35) 0%, transparent 70%);
+  }
+  .hero-eyebrow {
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: clamp(0.8rem, 2.5vw, 1rem);
+    letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--gold-bright);
+    margin-bottom: 1.5rem;
+    opacity: 0; animation: rise 0.9s 0.2s forwards;
+  }
+  .hero-logo {
+    width: min(80vw, 720px);
+    height: auto;
+    filter: drop-shadow(0 6px 40px rgba(0,0,0,0.55));
+    opacity: 0; animation: rise 1s 0.35s forwards;
+  }
+  .hero-subtitle {
+    font-family: var(--font-body); font-weight: 300; font-style: italic;
+    font-size: clamp(1.05rem, 3.5vw, 1.6rem);
+    color: var(--parchment);
+    margin-top: 1.5rem;
+    letter-spacing: 0.02em;
+    opacity: 0; animation: rise 1s 0.55s forwards;
+  }
+  .hero-meta {
+    display: flex; flex-wrap: wrap; gap: 0.75rem 2rem; justify-content: center;
+    margin-top: 2.5rem;
+    font-family: var(--font-cond); font-weight: 500;
+    font-size: clamp(0.85rem, 2.2vw, 1.05rem);
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--parchment);
+    opacity: 0; animation: rise 1s 0.7s forwards;
+  }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 0.6rem; }
+  .hero-meta .dot { color: var(--gold); }
+  .hero-actions {
+    display: flex; flex-wrap: wrap; gap: 1rem; justify-content: center;
+    margin-top: 2.75rem;
+    opacity: 0; animation: rise 1s 0.85s forwards;
+  }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(26px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ── BUTTONS ── */
+  .btn-gold, .btn-ghost {
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.95rem; letter-spacing: 0.12em; text-transform: uppercase;
+    padding: 1rem 2.2rem; border-radius: 2px;
+    cursor: pointer; transition: all 0.2s; display: inline-block;
+  }
+  .btn-gold {
+    background: var(--gold); color: var(--midnight);
+    border: 1px solid var(--gold);
+    box-shadow: 0 4px 24px rgba(201,162,75,0.25);
+  }
+  .btn-gold:hover { background: var(--gold-bright); border-color: var(--gold-bright); transform: translateY(-2px); }
+  .btn-ghost {
+    background: transparent; color: var(--parchment);
+    border: 1px solid rgba(232,224,205,0.35);
+  }
+  .btn-ghost:hover { border-color: var(--cream); background: rgba(232,224,205,0.06); }
+
+  /* ── SECTIONS ── */
+  .section { padding: 5.5rem 1.5rem; position: relative; }
+  .container { max-width: 1080px; margin: 0 auto; }
+  .container-narrow { max-width: 760px; margin: 0 auto; }
+
+  .eyebrow {
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.82rem; letter-spacing: 0.28em; text-transform: uppercase;
+    color: var(--gold-bright);
+    display: block; margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(2rem, 6vw, 3.2rem);
+    line-height: 1.05; color: var(--cream);
+    letter-spacing: 0.01em;
+  }
+  .section-lead {
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    color: var(--parchment);
+    margin-top: 1.5rem; line-height: 1.7;
+    font-weight: 300;
+  }
+
+  /* Decorative divider: a thin gold rule with a diamond, echoes the banner's crest */
+  .crest-divider {
+    display: flex; align-items: center; justify-content: center;
+    gap: 1rem; margin: 0 auto;
+    color: var(--gold);
+  }
+  .crest-divider::before, .crest-divider::after {
+    content: ''; height: 1px; width: 60px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+  .crest-divider::after { background: linear-gradient(90deg, var(--gold), transparent); }
+  .crest-divider .diamond { width: 8px; height: 8px; background: var(--gold); transform: rotate(45deg); }
+
+  /* ── INVITATION (what is camp) ── */
+  .invite { text-align: center; }
+  .invite .container-narrow > .crest-divider { margin-bottom: 2rem; }
+
+  /* ── MEDIA CAROUSEL ── */
+  .carousel { margin-top: 2.5rem; max-width: 900px; margin-left: auto; margin-right: auto; }
+  .carousel-stage {
+    position: relative;
+    border: 1px solid rgba(201,162,75,0.3);
+    border-radius: 3px;
+    overflow: hidden;
+    background: #0b1219;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+    aspect-ratio: 16 / 9;              /* landscape on desktop */
+  }
+  .carousel-slide {
+    position: absolute; inset: 0;
+    display: none;
+    align-items: center; justify-content: center;
+    background: #0b1219;
+    overflow: hidden;
+  }
+  .carousel-slide.active { display: flex; }
+
+  /* Blurred fill: a copy of the content, blown up and blurred, sits behind the real content
+     to fill any letterbox gap (portrait item in landscape box, or vice versa). */
+  .slide-blur {
+    position: absolute; inset: 0;
+    background-size: cover; background-position: center;
+    filter: blur(28px) brightness(0.55);
+    transform: scale(1.15);
+    z-index: 0;
+  }
+  /* Real content sits above the blur and is always fully visible (contain, never cropped) */
+  .slide-media {
+    position: relative; z-index: 1;
+    max-width: 100%; max-height: 100%;
+    width: auto; height: auto;
+  }
+  .carousel-slide img.slide-media,
+  .carousel-slide video.slide-media { object-fit: contain; }
+  /* iframes can't be 'contain'-sized by content, so we size them by orientation class */
+  .carousel-slide iframe.slide-media { border: 0; }
+  .carousel-slide.landscape iframe.slide-media { width: 100%; height: 100%; }
+  .carousel-slide.portrait iframe.slide-media {
+    height: 100%; width: auto; aspect-ratio: 9 / 16;
+  }
+
+  /* Placeholder slide */
+  .carousel-ph {
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    gap: 1.25rem; width: 100%; height: 100%; z-index: 1;
+    background: rgba(11,18,25,0.5); color: var(--parchment);
+    text-align: center; padding: 2rem;
+  }
+  .carousel-ph .ph-label {
+    font-family: var(--font-cond); font-weight: 500;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    font-size: 0.85rem; color: rgba(232,224,205,0.65);
+  }
+  .play-btn {
+    width: 84px; height: 84px; border-radius: 50%;
+    border: 2px solid var(--gold);
+    background: rgba(201,162,75,0.12);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s; cursor: pointer;
+  }
+  .play-btn svg { margin-left: 5px; }
+  .play-btn:hover { background: rgba(201,162,75,0.25); transform: scale(1.06); }
+
+  /* Unmute cue shown over muted autoplaying video */
+  .unmute-cue {
+    position: absolute; z-index: 6;
+    bottom: 1rem; right: 1rem;
+    display: flex; align-items: center; gap: 0.5rem;
+    padding: 0.55rem 0.9rem;
+    background: rgba(11,18,25,0.8);
+    border: 1px solid rgba(201,162,75,0.5);
+    border-radius: 2px;
+    color: var(--parchment); cursor: pointer;
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase;
+    transition: background 0.2s;
+  }
+  .unmute-cue:hover { background: rgba(201,162,75,0.25); }
+
+  /* Arrows */
+  .carousel-arrow {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    z-index: 5;
+    width: 48px; height: 48px; border-radius: 50%;
+    background: rgba(11,18,25,0.7);
+    border: 1px solid rgba(201,162,75,0.4);
+    color: var(--parchment);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s;
+  }
+  .carousel-arrow:hover { background: rgba(201,162,75,0.25); border-color: var(--gold); }
+  .carousel-arrow.prev { left: 1rem; }
+  .carousel-arrow.next { right: 1rem; }
+  .carousel-arrow:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+
+  /* Thumbnail strip */
+  .carousel-thumbs {
+    display: flex; gap: 0.75rem; margin-top: 1rem;
+    overflow-x: auto; padding-bottom: 0.5rem;
+    scrollbar-width: thin; scrollbar-color: var(--gold) transparent;
+  }
+  .carousel-thumbs::-webkit-scrollbar { height: 6px; }
+  .carousel-thumbs::-webkit-scrollbar-thumb { background: var(--gold-deep); border-radius: 3px; }
+  .carousel-thumb {
+    flex: 0 0 auto;
+    width: 130px; aspect-ratio: 16/9;
+    border-radius: 3px; overflow: hidden;
+    border: 2px solid transparent;
+    cursor: pointer; position: relative;
+    background: #0b1219;
+    transition: border-color 0.2s, opacity 0.2s;
+    opacity: 0.6;
+  }
+  .carousel-thumb:hover { opacity: 0.85; }
+  .carousel-thumb.active { border-color: var(--gold-bright); opacity: 1; }
+  .carousel-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .carousel-thumb .thumb-ph {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(27,45,63,0.6); color: var(--haze);
+  }
+  /* Little play glyph on video thumbnails */
+  .carousel-thumb.is-video::after {
+    content: ''; position: absolute; inset: 0; margin: auto;
+    width: 0; height: 0;
+    border-left: 14px solid rgba(245,239,224,0.9);
+    border-top: 9px solid transparent; border-bottom: 9px solid transparent;
+    filter: drop-shadow(0 0 4px rgba(0,0,0,0.6));
+  }
+  @media (max-width: 780px) {
+    .carousel-thumb { width: 100px; }
+    .carousel-arrow { width: 40px; height: 40px; }
+    /* Portrait stage on mobile: phones are held vertically, so favour that shape.
+       Vertical reels fill it; landscape items sit centered with blurred fill above/below. */
+    .carousel-stage { aspect-ratio: 4 / 5; }
+    .carousel-slide.portrait iframe.slide-media { height: 100%; width: 100%; aspect-ratio: auto; }
+    .carousel-slide.landscape iframe.slide-media { width: 100%; height: auto; aspect-ratio: 16/9; }
+  }
+
+  /* ── DETAILS GRID ── */
+  .details { background: rgba(27,45,63,0.4); border-top: 1px solid rgba(201,162,75,0.12); border-bottom: 1px solid rgba(201,162,75,0.12); }
+  .detail-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem; margin-top: 3rem;
+  }
+  .detail-card {
+    background: rgba(14,23,32,0.55);
+    border: 1px solid rgba(201,162,75,0.18);
+    border-radius: 3px;
+    padding: 1.75rem;
+  }
+  .detail-card .label {
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gold-bright); display: block; margin-bottom: 0.6rem;
+  }
+  .detail-card .value {
+    font-family: var(--font-display); font-weight: 600;
+    font-size: 1.35rem; color: var(--cream); line-height: 1.2;
+  }
+  .detail-card .sub { font-size: 0.92rem; color: var(--haze); margin-top: 0.4rem; }
+
+  /* ── INCLUDED ── */
+  .included-list {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 1rem; margin-top: 2.5rem;
+    list-style: none;
+  }
+  .included-list li {
+    display: flex; align-items: center; gap: 0.9rem;
+    font-size: 1.05rem; color: var(--parchment);
+    padding: 1rem 1.25rem;
+    background: rgba(27,45,63,0.35);
+    border-left: 2px solid var(--gold);
+    border-radius: 2px;
+  }
+  .included-list .tick { color: var(--gold-bright); flex-shrink: 0; }
+
+  /* ── COST BANNER ── */
+  .cost-banner {
+    text-align: center;
+    background: linear-gradient(135deg, rgba(45,67,86,0.5), rgba(27,45,63,0.5));
+    border: 1px solid rgba(201,162,75,0.25);
+    border-radius: 4px;
+    padding: 3rem 2rem;
+    margin-top: 3rem;
+  }
+  .cost-figure {
+    font-family: var(--font-display); font-weight: 800;
+    font-size: clamp(3rem, 10vw, 5rem); color: var(--gold-bright);
+    line-height: 1;
+  }
+  .cost-note { font-size: 1.05rem; color: var(--parchment); margin-top: 1rem; }
+  .cost-note strong { color: var(--cream); font-weight: 600; }
+
+  /* ── FAQ ── */
+  .faq-list { display: flex; flex-direction: column; gap: 0.6rem; margin-top: 3rem; }
+  .faq-item {
+    background: rgba(27,45,63,0.35);
+    border: 1px solid rgba(201,162,75,0.12);
+    border-left: 3px solid var(--gold);
+    border-radius: 3px; overflow: hidden;
+    transition: border-left-color 0.2s;
+  }
+  .faq-item[open] { border-left-color: var(--gold-bright); }
+  .faq-item summary {
+    list-style: none; cursor: pointer;
+    padding: 1.1rem 1.4rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    font-family: var(--font-cond); font-weight: 600; font-size: 1.05rem;
+    letter-spacing: 0.02em; color: var(--cream);
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary:hover { color: var(--gold-bright); }
+  .faq-item summary::after {
+    content: '+'; font-family: var(--font-display); font-size: 1.5rem;
+    color: var(--gold-bright); transition: transform 0.2s; flex-shrink: 0;
+  }
+  .faq-item[open] summary::after { transform: rotate(45deg); }
+  .faq-answer { padding: 0 1.4rem 1.2rem; color: var(--parchment); line-height: 1.7; font-size: 0.98rem; font-weight: 300; }
+  .faq-answer a { color: var(--gold-bright); text-decoration: underline; }
+
+  /* ── CONTACT ── */
+  .contact-methods {
+    display: grid; grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem; margin-top: 3rem;
+  }
+  .contact-card {
+    text-align: center;
+    background: rgba(27,45,63,0.35);
+    border: 1px solid rgba(201,162,75,0.18);
+    border-radius: 3px;
+    padding: 1.75rem 1.25rem;
+    transition: border-color 0.2s;
+  }
+  .contact-card:hover { border-color: rgba(201,162,75,0.45); }
+  .contact-card .c-icon { color: var(--gold-bright); margin-bottom: 0.75rem; }
+  .contact-card .c-label {
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--haze); display: block; margin-bottom: 0.4rem;
+  }
+  .contact-card .c-value {
+    font-family: var(--font-body); font-size: 1.05rem; color: var(--cream);
+    word-break: break-word;
+  }
+  .contact-card a.c-value:hover { color: var(--gold-bright); }
+  @media (max-width: 780px) {
+    .contact-methods { grid-template-columns: 1fr; }
+  }
+
+  /* ── FINAL CTA ── */
+  .final-cta {
+    text-align: center;
+    background: rgba(11,18,25,0.45);
+    border-top: 1px solid rgba(201,162,75,0.2);
+  }
+  .final-cta .section-title { margin-bottom: 1rem; }
+  .final-cta .deadline {
+    display: inline-block; margin-top: 1.5rem;
+    font-family: var(--font-cond); font-weight: 600;
+    font-size: 0.85rem; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--gold-bright);
+    padding: 0.5rem 1.2rem; border: 1px solid rgba(201,162,75,0.35); border-radius: 2px;
+  }
+  .final-cta .btn-gold { margin-top: 2rem; font-size: 1.05rem; padding: 1.15rem 3rem; }
+
+  /* ── FOOTER ── */
+  .footer {
+    text-align: center; padding: 3rem 1.5rem;
+    border-top: 1px solid rgba(201,162,75,0.12);
+    background: #0b1219;
+  }
+  .footer-logo-img {
+    width: 84px; height: 84px; object-fit: contain;
+    margin-bottom: 0.75rem; opacity: 0.9;
+  }
+  .footer-copy { font-size: 0.82rem; color: var(--haze); margin-top: 0.75rem; }
+  .footer-copy a { color: var(--gold-bright); }
+
+  /* ── REVEAL ── */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 780px) {
+    .detail-grid { grid-template-columns: 1fr; }
+    .included-list { grid-template-columns: 1fr; }
+    .nav { padding: 0 1.25rem; }
+    .section { padding: 4rem 1.25rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-back">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    DC Youth
+  </a>
+  <a href="https://dcchurch.churchsuite.com/events/aj74qsq2" target="_blank" rel="noopener" class="nav-cta">Register</a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-banner"></div>
+  <div class="hero-eyebrow">DC Youth Camp &middot; 2026</div>
+  <img src="kingdom-logo.png" alt="Kingdom" class="hero-logo">
+  <p class="hero-subtitle">His Kingdom is where we call home</p>
+  <div class="hero-meta">
+    <span><span class="dot">&#9670;</span> 28 Sept &ndash; 2 Oct</span>
+    <span><span class="dot">&#9670;</span> Years 7 to 12</span>
+    <span><span class="dot">&#9670;</span> Bornhoffen, Natural Bridge</span>
+  </div>
+  <div class="hero-actions">
+    <a href="https://dcchurch.churchsuite.com/events/aj74qsq2" target="_blank" rel="noopener" class="btn-gold">Register Now</a>
+    <a href="#about" class="btn-ghost">Find Out More</a>
+  </div>
+</header>
+
+<!-- INVITATION -->
+<section class="section invite" id="about">
+  <div class="container-narrow">
+    <div class="crest-divider reveal"><span class="diamond"></span></div>
+    <span class="eyebrow reveal">The Invitation</span>
+    <h2 class="section-title reveal">Four nights away. One story you belong to.</h2>
+    <p class="section-lead reveal">Kingdom Camp is the highlight of the DC Youth year. Four nights at Bornhoffen in the Numinbah Valley, packed with adventure, worship, real friendships and space to encounter God. It is where students step out of the everyday and into something bigger, and come home changed. This year we are exploring what it means that His Kingdom is where we truly belong.</p>
+  </div>
+</section>
+
+<!-- MEDIA CAROUSEL -->
+<section class="section video-section">
+  <div class="container">
+    <div style="text-align:center;">
+      <span class="eyebrow reveal">A Taste of Camp</span>
+      <h2 class="section-title reveal">See it for yourself</h2>
+    </div>
+    <div class="carousel reveal" id="carousel">
+      <div class="carousel-stage" id="carouselStage">
+        <!-- Slides injected by JS from the mediaItems list below -->
+        <button class="carousel-arrow prev" id="carouselPrev" aria-label="Previous">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+        </button>
+        <button class="carousel-arrow next" id="carouselNext" aria-label="Next">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+        </button>
+      </div>
+      <div class="carousel-thumbs" id="carouselThumbs"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DETAILS -->
+<section class="section details">
+  <div class="container">
+    <div style="text-align:center;">
+      <span class="eyebrow reveal">The Essentials</span>
+      <h2 class="section-title reveal">Everything you need to know</h2>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-card reveal">
+        <span class="label">When</span>
+        <div class="value">28 Sept &ndash; 2 Oct 2026</div>
+        <div class="sub">Monday to Friday, September school holidays</div>
+      </div>
+      <div class="detail-card reveal">
+        <span class="label">Where</span>
+        <div class="value">Bornhoffen PCYC</div>
+        <div class="sub">3510 Nerang Murwillumbah Rd, Natural Bridge QLD 4211</div>
+      </div>
+      <div class="detail-card reveal">
+        <span class="label">Who</span>
+        <div class="value">Years 7 to 12</div>
+        <div class="sub">All high schoolers welcome, invite your friends</div>
+      </div>
+    </div>
+
+    <ul class="included-list reveal">
+      <li><span class="tick">&#10003;</span> Accommodation for the full camp</li>
+      <li><span class="tick">&#10003;</span> All meals provided</li>
+      <li><span class="tick">&#10003;</span> Activities and adventure</li>
+      <li><span class="tick">&#10003;</span> Transport to and from the venue</li>
+    </ul>
+
+    <div class="cost-banner reveal">
+      <div class="cost-figure">$250</div>
+      <p class="cost-note">Covers everything above. <strong>Money tight? Sponsorships are available</strong> so cost never keeps a young person from coming. Reach out and we will sort it out privately.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section">
+  <div class="container-narrow">
+    <div style="text-align:center;">
+      <span class="eyebrow reveal">For Parents</span>
+      <h2 class="section-title reveal">Questions, answered</h2>
+    </div>
+    <div class="faq-list">
+      <details class="faq-item reveal">
+        <summary>Is my child safe at camp?</summary>
+        <div class="faq-answer">Yes. Camp is supervised the entire time by our DC Camp Team, made up of youth leaders and church members who all hold blue cards. Our team runs the activities and looks after the group throughout camp. You will be given leader contact details before camp.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>What does the $250 cover?</summary>
+        <div class="faq-answer">Everything: accommodation, all meals, all activities, and transport to and from the venue. There are no hidden extras. If cost is a barrier, sponsorships are available, just reach out to us privately.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>How does my child get there?</summary>
+        <div class="faq-answer">Transport to and from Bornhoffen is included and organised through DC Youth. Drop-off and pickup are both at DC Church, 3 Chisholm Rd, Carrara. Exact times will be sent to you once registration is complete.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>What if my child has allergies or medication?</summary>
+        <div class="faq-answer">As part of registration you will complete a medical and consent form covering allergies, medications and any conditions we need to know about. Our leaders manage this carefully throughout camp.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>My child doesn't know anyone. Can they still come?</summary>
+        <div class="faq-answer">Absolutely. Camp is one of the easiest places to make friends fast, everyone is in the same boat and our leaders make sure no one is left out. Many students come not knowing anyone and leave with a whole new crew.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>What is Tribal Wars?</summary>
+        <div class="faq-answer">Tribal Wars is the ongoing team competition that runs throughout camp. Every camper is placed in a tribe, and tribes go head to head in games and challenges all camp long. You will be contacted with your child's tribe before camp, so you can grab some clothing and accessories in their tribe colours to get them kitted out.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>What should they pack?</summary>
+        <div class="faq-answer">A full packing list will be sent to you after registration. Think clothes for the camp, weather-appropriate gear, toiletries, a water bottle and sleeping gear. Everything else is covered.</div>
+      </details>
+      <details class="faq-item reveal">
+        <summary>When do I need to register by?</summary>
+        <div class="faq-answer">Registration closes on <strong>21 September</strong>. Registration and payment are completed through the button on this page.</div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="section">
+  <div class="container-narrow">
+    <div style="text-align:center;">
+      <span class="eyebrow reveal">Still Have Questions?</span>
+      <h2 class="section-title reveal">Get in touch</h2>
+      <p class="section-lead reveal">Happy to help with anything about Kingdom Camp. Reach out however suits you best.</p>
+    </div>
+    <div class="contact-methods">
+      <div class="contact-card reveal">
+        <div class="c-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg></div>
+        <span class="c-label">Phone</span>
+        <a href="tel:+61755969999" class="c-value">(07) 5596 9999</a>
+      </div>
+      <div class="contact-card reveal">
+        <div class="c-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 5L2 7"/></svg></div>
+        <span class="c-label">Email</span>
+        <a href="mailto:dcyouth@dc.church" class="c-value">dcyouth@dc.church</a>
+      </div>
+      <div class="contact-card reveal">
+        <div class="c-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></div>
+        <span class="c-label">Instagram</span>
+        <a href="https://www.instagram.com/dcyouth__/" target="_blank" rel="noopener" class="c-value">@dcyouth__</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="section final-cta">
+  <div class="container-narrow">
+    <span class="eyebrow reveal">Secure Your Spot</span>
+    <h2 class="section-title reveal">Your place in the Kingdom awaits</h2>
+    <p class="section-lead reveal">Registration and payment are completed in one step. Once you register you will also complete a medical and consent form to finalise your child's place.</p>
+    <div class="reveal">
+      <span class="deadline">Registrations close 21 September</span>
+    </div>
+    <div class="reveal">
+      <a href="https://dcchurch.churchsuite.com/events/aj74qsq2" target="_blank" rel="noopener" class="btn-gold">Register for Kingdom Camp</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <a href="/"><img src="og.jpg" alt="DC Youth" class="footer-logo-img"></a>
+  <p class="footer-copy">Part of Dream Centre Church, Gold Coast &middot; <a href="/">Back to DC Youth</a></p>
+</footer>
+
+<script>
+  /* ============================================================
+     MEDIA CAROUSEL
+     To add content, edit the mediaItems array below.
+     Each item is one of these shapes:
+
+       // YouTube video (the main promo). Use the video ID from the URL.
+       { type: 'youtube', id: 'VIDEO_ID', thumb: 'thumb.jpg' }
+
+       // Vimeo video
+       { type: 'vimeo', id: 'VIDEO_ID', thumb: 'thumb.jpg' }
+
+       // Instagram reel/post (use the full permalink)
+       { type: 'instagram', url: 'https://www.instagram.com/reel/XXXX/', thumb: 'thumb.jpg' }
+
+       // A photo
+       { type: 'image', src: 'camp-photo-1.jpg' }
+
+     'thumb' is optional but recommended for videos (a still frame). If omitted,
+     a generic thumbnail placeholder is shown.
+
+     The FIRST item is shown by default. Put the promo first.
+     Delete the placeholder item once you add real content.
+     ============================================================ */
+  const mediaItems = [
+    // Promo placeholder — swap this for the real promo when it's on YouTube:
+    // { type: 'youtube', id: 'YOUR_PROMO_ID', thumb: 'promo-thumb.jpg' },
+    { type: 'placeholder', label: 'Promo video coming soon' },
+
+    { type: 'youtube', id: 'eh1YO4tekes', silent: true },
+    { type: 'image', src: 'camp-worship-1.jpg', orientation: 'portrait' },
+    { type: 'image', src: 'camp-tribal-1.jpg', orientation: 'portrait' },
+    { type: 'youtube', id: 'WKgP6NjrObo', silent: true },
+    { type: 'image', src: 'camp-tribal-2.jpg', orientation: 'portrait' },
+    { type: 'image', src: 'camp-worship-2.jpg', orientation: 'portrait' }
+  ];
+
+  (function initCarousel() {
+    const stage = document.getElementById('carouselStage');
+    const thumbs = document.getElementById('carouselThumbs');
+    const prevBtn = document.getElementById('carouselPrev');
+    const nextBtn = document.getElementById('carouselNext');
+    if (!stage) return;
+
+    let current = 0;
+    let inView = false;
+    const slides = [];
+
+    // Build a slide element for an item. Videos are built lazily (embed only when played).
+    // Determine orientation for a given item
+    function orientationOf(item) {
+      if (item.orientation) return item.orientation;      // explicit override
+      if (item.type === 'instagram') return 'portrait';   // reels are vertical
+      return 'landscape';                                 // youtube/vimeo/images default landscape
+    }
+
+    function buildSlide(item, index) {
+      const slide = document.createElement('div');
+      slide.className = 'carousel-slide ' + orientationOf(item);
+
+      if (item.type === 'placeholder') {
+        slide.innerHTML =
+          '<div class="carousel-ph">' +
+            '<div class="play-btn"><svg width="28" height="28" viewBox="0 0 24 24" fill="#e0b95e"><polygon points="6 4 20 12 6 20"/></svg></div>' +
+            '<div class="ph-label">' + (item.label || 'Coming soon') + '</div>' +
+          '</div>';
+      } else if (item.type === 'image') {
+        // blurred fill from the same image + the sharp image on top
+        addBlur(slide, item.src);
+        const img = document.createElement('img');
+        img.src = item.src; img.alt = 'Camp photo'; img.loading = 'lazy';
+        img.className = 'slide-media';
+        slide.appendChild(img);
+      } else {
+        // video types: blurred fill from thumb, poster + play button, embed on demand
+        let thumbSrc = item.thumb;
+        if (!thumbSrc && item.type === 'youtube') {
+          thumbSrc = 'https://i.ytimg.com/vi/' + item.id + '/hqdefault.jpg';
+        }
+        if (thumbSrc) addBlur(slide, thumbSrc);
+        const poster = document.createElement('div');
+        poster.className = 'carousel-ph';
+        poster.style.cursor = 'pointer';
+        poster.style.background = 'transparent';
+        poster.innerHTML = '<div class="play-btn"><svg width="28" height="28" viewBox="0 0 24 24" fill="#e0b95e"><polygon points="6 4 20 12 6 20"/></svg></div>';
+        poster.addEventListener('click', (e) => { e.stopPropagation(); embedVideo(slide, item, false); });
+        slide.appendChild(poster);
+      }
+      return slide;
+    }
+
+    // Add a blurred backdrop layer to a slide
+    function addBlur(slide, src) {
+      const blur = document.createElement('div');
+      blur.className = 'slide-blur';
+      blur.style.backgroundImage = "url('" + src + "')";
+      slide.appendChild(blur);
+    }
+
+    // Swap a video slide's poster for the actual embed and autoplay it.
+    // Keeps the blurred backdrop behind the player.
+    function embedVideo(slide, item, muted) {
+      // remove the poster (keep any blur layer)
+      const poster = slide.querySelector('.carousel-ph');
+      if (poster) poster.remove();
+
+      const iframe = document.createElement('iframe');
+      iframe.className = 'slide-media';
+      iframe.setAttribute('allowfullscreen', '');
+      const origin = encodeURIComponent(window.location.origin);
+      if (item.type === 'youtube') {
+        iframe.src = 'https://www.youtube-nocookie.com/embed/' + item.id +
+          '?autoplay=1&rel=0&playsinline=1&modestbranding=1&mute=' + (muted ? '1' : '0') +
+          '&origin=' + origin;
+        iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
+      } else if (item.type === 'vimeo') {
+        iframe.src = 'https://player.vimeo.com/video/' + item.id + '?autoplay=1&muted=' + (muted ? '1' : '0');
+        iframe.allow = 'autoplay; fullscreen; picture-in-picture';
+      } else if (item.type === 'instagram') {
+        iframe.src = item.url.replace(/\/?$/, '/') + 'embed';
+        iframe.setAttribute('scrolling', 'no');
+      }
+      slide.appendChild(iframe);
+      slide.dataset.playing = '1';
+
+      // If muted autoplay AND the video actually has sound, show an "unmute" cue
+      if (muted && !item.silent && (item.type === 'youtube' || item.type === 'vimeo')) {
+        const unmute = document.createElement('button');
+        unmute.className = 'unmute-cue';
+        unmute.innerHTML =
+          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg><span>Tap for sound</span>';
+        unmute.addEventListener('click', (e) => {
+          e.stopPropagation();
+          embedVideo(slide, item, false); // re-embed with sound
+        });
+        slide.appendChild(unmute);
+      }
+    }
+
+    // Reset a video slide back to its poster (so it stops playing when navigated away)
+    function resetSlide(index) {
+      const item = mediaItems[index];
+      if (item.type === 'youtube' || item.type === 'vimeo' || item.type === 'instagram') {
+        const fresh = buildSlide(item, index);
+        if (slides[index].classList.contains('active')) fresh.classList.add('active');
+        stage.replaceChild(fresh, slides[index]);
+        slides[index] = fresh;
+      }
+    }
+
+    // Autoplay the active slide if it's a video (muted), used on scroll-in and swipe
+    function autoplayActive() {
+      const item = mediaItems[current];
+      if ((item.type === 'youtube' || item.type === 'vimeo') && slides[current].dataset.playing !== '1') {
+        embedVideo(slides[current], item, true);
+      }
+    }
+
+    function buildThumb(item, index) {
+      const t = document.createElement('button');
+      t.className = 'carousel-thumb';
+      if (['youtube','vimeo','instagram'].includes(item.type)) t.classList.add('is-video');
+      t.setAttribute('aria-label', 'View item ' + (index + 1));
+      if (item.type === 'image') {
+        t.innerHTML = '<img src="' + item.src + '" alt="" loading="lazy">';
+      } else if (item.thumb) {
+        t.innerHTML = '<img src="' + item.thumb + '" alt="" loading="lazy">';
+      } else {
+        t.innerHTML = '<div class="thumb-ph"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><polygon points="6 4 20 12 6 20"/></svg></div>';
+      }
+      t.addEventListener('click', () => goTo(index));
+      return t;
+    }
+
+    function goTo(index) {
+      if (index === current) return;
+      // reset any playing video on the slide we're leaving
+      resetSlide(current);
+      slides[current].classList.remove('active');
+      thumbEls[current].classList.remove('active');
+      current = index;
+      slides[current].classList.add('active');
+      thumbEls[current].classList.add('active');
+      thumbEls[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      // Autoplay the newly active slide (muted) if it's a video and carousel is on screen
+      if (inView) autoplayActive();
+    }
+
+    function next() { goTo((current + 1) % mediaItems.length); }
+    function prev() { goTo((current - 1 + mediaItems.length) % mediaItems.length); }
+
+    // Build everything
+    const thumbEls = [];
+    mediaItems.forEach((item, i) => {
+      const slide = buildSlide(item, i);
+      slides.push(slide);
+      stage.insertBefore(slide, prevBtn);
+      const thumb = buildThumb(item, i);
+      thumbEls.push(thumb);
+      thumbs.appendChild(thumb);
+    });
+
+    // Single item: hide arrows + thumbs
+    if (mediaItems.length <= 1) {
+      prevBtn.style.display = 'none';
+      nextBtn.style.display = 'none';
+      thumbs.style.display = 'none';
+    }
+
+    slides[0].classList.add('active');
+    thumbEls[0].classList.add('active');
+    nextBtn.addEventListener('click', next);
+    prevBtn.addEventListener('click', prev);
+
+    // Touch swipe on the stage (mobile)
+    let touchStartX = 0, touchStartY = 0, touching = false;
+    stage.addEventListener('touchstart', (e) => {
+      if (mediaItems.length <= 1) return;
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+      touching = true;
+    }, { passive: true });
+    stage.addEventListener('touchend', (e) => {
+      if (!touching || mediaItems.length <= 1) return;
+      touching = false;
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      // horizontal swipe only, and must be a deliberate distance
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) next(); else prev();
+      }
+    }, { passive: true });
+
+    // Keyboard arrows when carousel focused
+    stage.setAttribute('tabindex', '0');
+    stage.addEventListener('keydown', (e) => {
+      if (mediaItems.length <= 1) return;
+      if (e.key === 'ArrowRight') { next(); e.preventDefault(); }
+      if (e.key === 'ArrowLeft') { prev(); e.preventDefault(); }
+    });
+
+    // Autoplay the active video slide (muted) when the carousel scrolls into view;
+    // reset it when it scrolls out so nothing plays off-screen.
+    const viewObserver = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        inView = entry.isIntersecting;
+        if (inView) {
+          autoplayActive();
+        } else if (slides[current].dataset.playing === '1') {
+          resetSlide(current);
+        }
+      });
+    }, { threshold: 0.55 });
+    viewObserver.observe(stage);
+  })();
+
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 50);
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
