@@ -757,14 +757,17 @@
      Delete the placeholder item once you add real content.
      ============================================================ */
   const mediaItems = [
-    // Promo placeholder — swap this for the real promo when it's on YouTube:
+    // Promo placeholder — swap this for the real promo when it's on YouTube/Vimeo:
     // { type: 'youtube', id: 'YOUR_PROMO_ID', thumb: 'promo-thumb.jpg' },
     { type: 'placeholder', label: 'Promo video coming soon' },
 
-    { type: 'youtube', id: 'eh1YO4tekes', silent: true },
+    // Silent looping camp clips (play like animations, no controls)
+    { type: 'loopvideo', src: 'camp-video-1.mp4', thumb: 'camp-video-1-poster.jpg' },
+    { type: 'loopvideo', src: 'camp-video-2.mp4', thumb: 'camp-video-2-poster.jpg' },
+
+    // Camp photo strips (portrait)
     { type: 'image', src: 'camp-worship-1.jpg', orientation: 'portrait' },
     { type: 'image', src: 'camp-tribal-1.jpg', orientation: 'portrait' },
-    { type: 'youtube', id: 'WKgP6NjrObo', silent: true },
     { type: 'image', src: 'camp-tribal-2.jpg', orientation: 'portrait' },
     { type: 'image', src: 'camp-worship-2.jpg', orientation: 'portrait' }
   ];
@@ -785,7 +788,7 @@
     function orientationOf(item) {
       if (item.orientation) return item.orientation;      // explicit override
       if (item.type === 'instagram') return 'portrait';   // reels are vertical
-      return 'landscape';                                 // youtube/vimeo/images default landscape
+      return 'landscape';                                 // youtube/vimeo/loopvideo/images default landscape
     }
 
     function buildSlide(item, index) {
@@ -805,6 +808,17 @@
         img.src = item.src; img.alt = 'Camp photo'; img.loading = 'lazy';
         img.className = 'slide-media';
         slide.appendChild(img);
+      } else if (item.type === 'loopvideo') {
+        // Silent auto-looping clip, plays like an animation. Blurred fill behind.
+        if (item.thumb) addBlur(slide, item.thumb);
+        const v = document.createElement('video');
+        v.className = 'slide-media';
+        v.src = item.src;
+        v.muted = true; v.loop = true; v.playsInline = true;
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        v.setAttribute('preload', 'metadata');
+        if (item.thumb) v.poster = item.thumb;
+        slide.appendChild(v);
       } else {
         // video types: blurred fill from thumb, poster + play button, embed on demand
         let thumbSrc = item.thumb;
@@ -879,6 +893,10 @@
         if (slides[index].classList.contains('active')) fresh.classList.add('active');
         stage.replaceChild(fresh, slides[index]);
         slides[index] = fresh;
+      } else if (item.type === 'loopvideo') {
+        // just pause and rewind the looping clip
+        const v = slides[index].querySelector('video');
+        if (v) { v.pause(); v.currentTime = 0; }
       }
     }
 
@@ -887,6 +905,9 @@
       const item = mediaItems[current];
       if ((item.type === 'youtube' || item.type === 'vimeo') && slides[current].dataset.playing !== '1') {
         embedVideo(slides[current], item, true);
+      } else if (item.type === 'loopvideo') {
+        const v = slides[current].querySelector('video');
+        if (v) { const p = v.play(); if (p && p.catch) p.catch(()=>{}); }
       }
     }
 
@@ -982,8 +1003,11 @@
         inView = entry.isIntersecting;
         if (inView) {
           autoplayActive();
-        } else if (slides[current].dataset.playing === '1') {
-          resetSlide(current);
+        } else {
+          const item = mediaItems[current];
+          if (slides[current].dataset.playing === '1' || item.type === 'loopvideo') {
+            resetSlide(current);
+          }
         }
       });
     }, { threshold: 0.55 });
