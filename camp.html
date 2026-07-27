@@ -64,7 +64,7 @@
     background-image: url('kingdom-bg.jpg');
     background-size: cover;
     background-position: center;
-    filter: blur(18px) brightness(0.4) saturate(1.1);
+    filter: blur(14px) brightness(0.5) saturate(1.15);
     transform: scale(1.08);
     z-index: -2;
     pointer-events: none;
@@ -75,13 +75,29 @@
     position: fixed;
     inset: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 50% 20%, rgba(74,100,120,0.15) 0%, transparent 55%),
-      linear-gradient(180deg, rgba(20,33,46,0.5) 0%, rgba(14,23,32,0.72) 50%, rgba(11,18,25,0.85) 100%);
+      radial-gradient(ellipse 80% 60% at 50% 20%, rgba(74,100,120,0.12) 0%, transparent 55%),
+      linear-gradient(180deg, rgba(20,33,46,0.38) 0%, rgba(14,23,32,0.62) 50%, rgba(11,18,25,0.82) 100%);
     z-index: -1;
     pointer-events: none;
   }
 
   a { color: inherit; text-decoration: none; }
+
+  /* Faint film grain over everything for depth (SVG noise, no external file) */
+  .page-grain {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    opacity: 0.045;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 140px 140px;
+    mix-blend-mode: overlay;
+  }
+  /* Subtle vignette to focus the eye and deepen the edges */
+  .page-vignette {
+    position: fixed; inset: 0; z-index: 0;
+    pointer-events: none;
+    background: radial-gradient(ellipse 100% 80% at 50% 45%, transparent 55%, rgba(6,11,16,0.4) 100%);
+  }
 
   /* ── NAV ── */
   .nav {
@@ -111,6 +127,7 @@
   /* ── HERO ── */
   .hero {
     position: relative;
+    z-index: 1;
     min-height: 92vh;
     min-height: 92svh;
     display: flex; flex-direction: column;
@@ -209,7 +226,7 @@
   .btn-ghost:hover { border-color: var(--cream); background: rgba(232,224,205,0.06); }
 
   /* ── SECTIONS ── */
-  .section { padding: 5.5rem 1.5rem; position: relative; }
+  .section { padding: 5.5rem 1.5rem; position: relative; z-index: 1; }
   .container { max-width: 1080px; margin: 0 auto; }
   .container-narrow { max-width: 760px; margin: 0 auto; }
 
@@ -522,6 +539,7 @@
 
   /* ── FOOTER ── */
   .footer {
+    position: relative; z-index: 1;
     text-align: center; padding: 3rem 1.5rem;
     border-top: 1px solid rgba(201,162,75,0.12);
     background: #0b1219;
@@ -552,6 +570,8 @@
 </style>
 </head>
 <body>
+<div class="page-grain" aria-hidden="true"></div>
+<div class="page-vignette" aria-hidden="true"></div>
 
 <!-- NAV -->
 <nav class="nav">
