@@ -1373,21 +1373,29 @@
         v.src = item.src;
         v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
         v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
-        v.setAttribute('controls', ''); // give controls in the enlarged view
+        v.setAttribute('controls', '');
         lightboxContent.appendChild(v);
         const p = v.play(); if (p && p.catch) p.catch(function(){});
       }
       lightbox.classList.add('open');
       lightbox.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      // Push a history entry so the phone/browser back button closes the lightbox
+      history.pushState({ lightbox: true }, '');
     }
 
+    let closingFromPop = false;
     function closeLightbox() {
-      if (!lightbox) return;
+      if (!lightbox || !lightbox.classList.contains('open')) return;
       lightbox.classList.remove('open');
       lightbox.setAttribute('aria-hidden', 'true');
-      lightboxContent.innerHTML = ''; // stop any playing video
+      lightboxContent.innerHTML = '';
       document.body.style.overflow = '';
+      // If closed manually (not via back button), pop the history entry we added
+      if (!closingFromPop && history.state && history.state.lightbox) {
+        history.back();
+      }
+      closingFromPop = false;
     }
 
     if (lightbox) {
@@ -1397,6 +1405,13 @@
       });
       document.addEventListener('keydown', function (e) {
         if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+      // Back button / gesture closes the lightbox instead of leaving the site
+      window.addEventListener('popstate', function () {
+        if (lightbox.classList.contains('open')) {
+          closingFromPop = true;
+          closeLightbox();
+        }
       });
     }
   })();
