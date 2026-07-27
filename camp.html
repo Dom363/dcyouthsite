@@ -366,6 +366,8 @@
   .carousel-arrow.prev { left: 1rem; }
   .carousel-arrow.next { right: 1rem; }
   .carousel-arrow:focus-visible { outline: 2px solid var(--gold-bright); outline-offset: 2px; }
+  /* Faded-out state (used on the promo video slide while its controls are in use) */
+  .carousel-arrow.arrows-hidden { opacity: 0; pointer-events: none; }
 
   /* Thumbnail strip */
   .carousel-thumbs {
@@ -943,6 +945,7 @@
 
     let current = 0;
     let inView = false;
+    let arrowHideTimer = null;
     const slides = [];
 
     // Build a slide element for an item. Videos are built lazily (embed only when played).
@@ -1123,6 +1126,9 @@
       slides[current].classList.add('active');
       thumbEls[current].classList.add('active');
       thumbEls[current].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      // arrows always visible when arriving on a new slide
+      clearTimeout(arrowHideTimer);
+      showArrows();
       // Autoplay the newly active slide (muted) if it's a video and carousel is on screen
       if (inView) autoplayActive();
     }
@@ -1152,6 +1158,30 @@
     thumbEls[0].classList.add('active');
     nextBtn.addEventListener('click', next);
     prevBtn.addEventListener('click', prev);
+
+    // ── Arrow auto-fade on the promo (YouTube) slide only ──
+    // When the user interacts with the video (bringing up YouTube's controls),
+    // fade the arrows out of the way, then bring them back after inactivity.
+    function arrowsOnlyClashSlide() {
+      return mediaItems[current] && mediaItems[current].type === 'youtube';
+    }
+    function hideArrows() {
+      prevBtn.classList.add('arrows-hidden');
+      nextBtn.classList.add('arrows-hidden');
+    }
+    function showArrows() {
+      prevBtn.classList.remove('arrows-hidden');
+      nextBtn.classList.remove('arrows-hidden');
+    }
+    function nudgeArrows() {
+      if (!arrowsOnlyClashSlide()) return;   // only the YouTube promo needs this
+      hideArrows();
+      clearTimeout(arrowHideTimer);
+      arrowHideTimer = setTimeout(showArrows, 3000); // return after 3s of no interaction
+    }
+    // Any tap/click inside the stage on the promo slide triggers the fade
+    stage.addEventListener('click', nudgeArrows);
+    stage.addEventListener('touchstart', nudgeArrows, { passive: true });
 
     // Touch swipe on the stage (mobile)
     let touchStartX = 0, touchStartY = 0, touching = false;
