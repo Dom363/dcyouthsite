@@ -304,8 +304,10 @@
   .carousel-slide img.slide-media,
   .carousel-slide video.slide-media { object-fit: contain; }
   /* iframes can't be 'contain'-sized by content, so we size them by orientation class */
-  .carousel-slide iframe.slide-media { border: 0; }
-  .carousel-slide.landscape iframe.slide-media { width: 100%; height: 100%; }
+  .carousel-slide iframe.slide-media,
+  .carousel-slide iframe { border: 0; }
+  .carousel-slide.landscape iframe.slide-media,
+  .carousel-slide.landscape iframe { width: 100%; height: 100%; }
   .carousel-slide.portrait iframe.slide-media {
     height: 100%; width: auto; aspect-ratio: 9 / 16;
   }
@@ -919,6 +921,26 @@
     const nextBtn = document.getElementById('carouselNext');
     if (!stage) return;
 
+    // ── YouTube IFrame API loader (so we can control play/mute without reloading) ──
+    let ytReady = false;
+    const ytReadyCallbacks = [];
+    function onYT(cb) { if (ytReady) cb(); else ytReadyCallbacks.push(cb); }
+    (function loadYT() {
+      if (window.YT && window.YT.Player) { ytReady = true; return; }
+      const prev = window.onYouTubeIframeAPIReady;
+      window.onYouTubeIframeAPIReady = function () {
+        if (typeof prev === 'function') { try { prev(); } catch (e) {} }
+        ytReady = true;
+        ytReadyCallbacks.forEach(function (cb) { cb(); });
+        ytReadyCallbacks.length = 0;
+      };
+      if (!document.querySelector('script[src*="youtube.com/iframe_api"]')) {
+        const s = document.createElement('script');
+        s.src = 'https://www.youtube.com/iframe_api';
+        document.head.appendChild(s);
+      }
+    })();
+
     let current = 0;
     let inView = false;
     const slides = [];
@@ -985,23 +1007,56 @@
       slide.appendChild(blur);
     }
 
-    // Swap a video slide's poster for the actual embed and autoplay it.
-    // Keeps the blurred backdrop behind the player.
+    // Swap a video slide's poster for the actual embed and play it.
+    // For YouTube we use the IFrame API so we can unmute in place (no reload).
     function embedVideo(slide, item, muted) {
-      // remove the poster (keep any blur layer)
       const poster = slide.querySelector('.carousel-ph');
       if (poster) poster.remove();
+      slide.dataset.playing = '1';
+
+      if (item.type === 'youtube') {
+        const mount = document.createElement('div');
+        mount.className = 'slide-media';
+        slide.appendChild(mount);
+
+        onYT(function () {
+          const player = new YT.Player(mount, {
+            videoId: item.id,
+            playerVars: {
+              autoplay: 1, rel: 0, playsinline: 1, modestbranding: 1,
+              mute: muted ? 1 : 0,
+              origin: window.location.origin
+            },
+            events: {
+              onReady: function (e) {
+                if (muted) e.target.mute();
+                e.target.playVideo();
+              }
+            }
+          });
+          slide._ytPlayer = player;
+        });
+
+        if (muted && !item.silent) {
+          const unmute = document.createElement('button');
+          unmute.className = 'unmute-cue';
+          unmute.innerHTML =
+            '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg><span>Tap for sound</span>';
+          unmute.addEventListener('click', function (e) {
+            e.stopPropagation();
+            const p = slide._ytPlayer;
+            if (p && p.unMute) { p.unMute(); if (p.setVolume) p.setVolume(100); if (p.playVideo) p.playVideo(); }
+            unmute.remove();
+          });
+          slide.appendChild(unmute);
+        }
+        return;
+      }
 
       const iframe = document.createElement('iframe');
       iframe.className = 'slide-media';
       iframe.setAttribute('allowfullscreen', '');
-      const origin = encodeURIComponent(window.location.origin);
-      if (item.type === 'youtube') {
-        iframe.src = 'https://www.youtube-nocookie.com/embed/' + item.id +
-          '?autoplay=1&rel=0&playsinline=1&modestbranding=1&mute=' + (muted ? '1' : '0') +
-          '&origin=' + origin;
-        iframe.allow = 'autoplay; encrypted-media; fullscreen; picture-in-picture';
-      } else if (item.type === 'vimeo') {
+      if (item.type === 'vimeo') {
         iframe.src = 'https://player.vimeo.com/video/' + item.id + '?autoplay=1&muted=' + (muted ? '1' : '0');
         iframe.allow = 'autoplay; fullscreen; picture-in-picture';
       } else if (item.type === 'instagram') {
@@ -1009,32 +1064,21 @@
         iframe.setAttribute('scrolling', 'no');
       }
       slide.appendChild(iframe);
-      slide.dataset.playing = '1';
-
-      // If muted autoplay AND the video actually has sound, show an "unmute" cue
-      if (muted && !item.silent && (item.type === 'youtube' || item.type === 'vimeo')) {
-        const unmute = document.createElement('button');
-        unmute.className = 'unmute-cue';
-        unmute.innerHTML =
-          '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg><span>Tap for sound</span>';
-        unmute.addEventListener('click', (e) => {
-          e.stopPropagation();
-          embedVideo(slide, item, false); // re-embed with sound
-        });
-        slide.appendChild(unmute);
-      }
     }
 
     // Reset a video slide back to its poster (so it stops playing when navigated away)
     function resetSlide(index) {
       const item = mediaItems[index];
       if (item.type === 'youtube' || item.type === 'vimeo' || item.type === 'instagram') {
+        if (slides[index]._ytPlayer && slides[index]._ytPlayer.destroy) {
+          try { slides[index]._ytPlayer.destroy(); } catch (e) {}
+          slides[index]._ytPlayer = null;
+        }
         const fresh = buildSlide(item, index);
         if (slides[index].classList.contains('active')) fresh.classList.add('active');
         stage.replaceChild(fresh, slides[index]);
         slides[index] = fresh;
       } else if (item.type === 'loopvideo') {
-        // just pause and rewind the looping clip
         const v = slides[index].querySelector('video');
         if (v) { v.pause(); v.currentTime = 0; }
       }
@@ -1047,7 +1091,7 @@
         embedVideo(slides[current], item, true);
       } else if (item.type === 'loopvideo') {
         const v = slides[current].querySelector('video');
-        if (v) { const p = v.play(); if (p && p.catch) p.catch(()=>{}); }
+        if (v) { const p = v.play(); if (p && p.catch) p.catch(function(){}); }
       }
     }
 
