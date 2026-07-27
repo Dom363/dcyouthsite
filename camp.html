@@ -1156,8 +1156,10 @@
 
     slides[0].classList.add('active');
     thumbEls[0].classList.add('active');
-    nextBtn.addEventListener('click', next);
-    prevBtn.addEventListener('click', prev);
+    nextBtn.addEventListener('click', (e) => { e.stopPropagation(); next(); });
+    prevBtn.addEventListener('click', (e) => { e.stopPropagation(); prev(); });
+    nextBtn.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
+    prevBtn.addEventListener('touchstart', (e) => { e.stopPropagation(); }, { passive: true });
 
     // ── Arrow auto-fade on the promo (YouTube) slide only ──
     // When the user interacts with the video (bringing up YouTube's controls),
