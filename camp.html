@@ -769,17 +769,21 @@
     function targetCount() { return Math.max(14, Math.min(38, Math.round(w / 42))); }
 
     function spawn(fromBottom) {
+      const heat = Math.random(); // 0 = cooler/orange, 1 = hotter/white-gold
       return {
         x: Math.random() * w,
         y: fromBottom ? h + Math.random() * 40 : Math.random() * h,
-        r: 0.6 + Math.random() * 1.6,          // small
-        vy: 0.15 + Math.random() * 0.4,        // slow rise
-        drift: (Math.random() - 0.5) * 0.25,   // gentle horizontal
+        r: 0.5 + Math.random() * 1.1,          // small sharp core
+        vy: 0.4 + Math.random() * 1.0,         // faster, more varied rise
+        drift: (Math.random() - 0.5) * 0.4,
         sway: Math.random() * Math.PI * 2,
-        swaySpeed: 0.005 + Math.random() * 0.01,
+        swaySpeed: 0.01 + Math.random() * 0.03,
         life: 0,
-        maxLife: 300 + Math.random() * 400,
-        baseAlpha: 0.15 + Math.random() * 0.4  // subtle
+        maxLife: 180 + Math.random() * 260,
+        baseAlpha: 0.35 + Math.random() * 0.45,
+        heat: heat,
+        flick: Math.random() * Math.PI * 2,    // flicker phase
+        flickSpeed: 0.15 + Math.random() * 0.35 // fast flicker
       };
     }
 
@@ -792,33 +796,44 @@
 
     function draw() {
       ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'lighter'; // embers add light, glow where they overlap
       for (let p of particles) {
         p.life++;
         p.y -= p.vy;
         p.sway += p.swaySpeed;
-        p.x += p.drift + Math.sin(p.sway) * 0.15;
-        // fade in over first 15%, hold, fade out over last 30%
+        p.flick += p.flickSpeed;
+        p.x += p.drift + Math.sin(p.sway) * 0.2;
+
         const lifeRatio = p.life / p.maxLife;
         let fade = 1;
-        if (lifeRatio < 0.15) fade = lifeRatio / 0.15;
-        else if (lifeRatio > 0.7) fade = Math.max(0, 1 - (lifeRatio - 0.7) / 0.3);
-        const alpha = p.baseAlpha * fade;
+        if (lifeRatio < 0.1) fade = lifeRatio / 0.1;
+        else if (lifeRatio > 0.6) fade = Math.max(0, 1 - (lifeRatio - 0.6) / 0.4);
+        // rapid flicker on top of the fade
+        const flicker = 0.55 + 0.45 * Math.abs(Math.sin(p.flick));
+        const alpha = p.baseAlpha * fade * flicker;
 
-        // warm gold ember with soft glow
-        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
-        grad.addColorStop(0, 'rgba(224,185,94,' + alpha + ')');
-        grad.addColorStop(0.4, 'rgba(201,162,75,' + (alpha * 0.5) + ')');
-        grad.addColorStop(1, 'rgba(201,162,75,0)');
+        // colour: hot ones white-gold, cooler ones deep orange; cool further as they age
+        const cool = Math.min(1, lifeRatio * 0.8);
+        const rr = 255;
+        const gg = Math.round(200 - cool * 70 + p.heat * 40);
+        const bb = Math.round(90 - cool * 60 + p.heat * 80);
+
+        // tiny bright core + small tight glow
+        const glowR = p.r * 2.2;
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, glowR);
+        grad.addColorStop(0, 'rgba(255,240,210,' + alpha + ')');
+        grad.addColorStop(0.35, 'rgba(' + rr + ',' + gg + ',' + bb + ',' + (alpha * 0.6) + ')');
+        grad.addColorStop(1, 'rgba(' + rr + ',' + gg + ',' + bb + ',0)');
         ctx.fillStyle = grad;
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+        ctx.arc(p.x, p.y, glowR, 0, Math.PI * 2);
         ctx.fill();
 
-        // recycle when off-top or expired
         if (p.y < -10 || p.life > p.maxLife) {
           Object.assign(p, spawn(true));
         }
       }
+      ctx.globalCompositeOperation = 'source-over';
       raf = requestAnimationFrame(draw);
     }
 
