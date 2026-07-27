@@ -134,6 +134,17 @@
       linear-gradient(180deg, rgba(20,33,46,0.1) 0%, rgba(20,33,46,0.2) 50%, rgba(20,33,46,0.75) 85%, var(--midnight) 100%),
       radial-gradient(ellipse 55% 45% at 50% 42%, rgba(20,33,46,0.35) 0%, transparent 70%);
   }
+  /* Embers drift up behind the logo/text, above the background image */
+  .hero-embers {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    z-index: 0; pointer-events: none;
+  }
+  .hero > .hero-eyebrow,
+  .hero > .hero-logo,
+  .hero > .hero-subtitle,
+  .hero > .hero-meta,
+  .hero > .hero-actions { position: relative; z-index: 1; }
   .hero-eyebrow {
     font-family: var(--font-cond); font-weight: 600;
     font-size: clamp(0.8rem, 2.5vw, 1rem);
@@ -554,6 +565,7 @@
 <!-- HERO -->
 <header class="hero">
   <div class="hero-banner"></div>
+  <canvas class="hero-embers" id="heroEmbers" aria-hidden="true"></canvas>
   <div class="hero-eyebrow">DC Youth Camp &middot; 2026</div>
   <img src="kingdom-logo.png" alt="Kingdom" class="hero-logo">
   <p class="hero-subtitle">His Kingdom is where we call home</p>
@@ -737,6 +749,96 @@
 </footer>
 
 <script>
+  /* ── Hero embers: slow warm particles drifting up, forge/campfire feel ── */
+  (function heroEmbers() {
+    const canvas = document.getElementById('heroEmbers');
+    if (!canvas) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce) return; // respect reduced-motion: no animation
+    const ctx = canvas.getContext('2d');
+    let w, h, dpr, particles = [], raf;
+
+    function resize() {
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      w = canvas.clientWidth; h = canvas.clientHeight;
+      canvas.width = w * dpr; canvas.height = h * dpr;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    // Density scales with width but stays sparse
+    function targetCount() { return Math.max(14, Math.min(38, Math.round(w / 42))); }
+
+    function spawn(fromBottom) {
+      return {
+        x: Math.random() * w,
+        y: fromBottom ? h + Math.random() * 40 : Math.random() * h,
+        r: 0.6 + Math.random() * 1.6,          // small
+        vy: 0.15 + Math.random() * 0.4,        // slow rise
+        drift: (Math.random() - 0.5) * 0.25,   // gentle horizontal
+        sway: Math.random() * Math.PI * 2,
+        swaySpeed: 0.005 + Math.random() * 0.01,
+        life: 0,
+        maxLife: 300 + Math.random() * 400,
+        baseAlpha: 0.15 + Math.random() * 0.4  // subtle
+      };
+    }
+
+    function init() {
+      resize();
+      particles = [];
+      const n = targetCount();
+      for (let i = 0; i < n; i++) particles.push(spawn(false));
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, w, h);
+      for (let p of particles) {
+        p.life++;
+        p.y -= p.vy;
+        p.sway += p.swaySpeed;
+        p.x += p.drift + Math.sin(p.sway) * 0.15;
+        // fade in over first 15%, hold, fade out over last 30%
+        const lifeRatio = p.life / p.maxLife;
+        let fade = 1;
+        if (lifeRatio < 0.15) fade = lifeRatio / 0.15;
+        else if (lifeRatio > 0.7) fade = Math.max(0, 1 - (lifeRatio - 0.7) / 0.3);
+        const alpha = p.baseAlpha * fade;
+
+        // warm gold ember with soft glow
+        const grad = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, p.r * 3);
+        grad.addColorStop(0, 'rgba(224,185,94,' + alpha + ')');
+        grad.addColorStop(0.4, 'rgba(201,162,75,' + (alpha * 0.5) + ')');
+        grad.addColorStop(1, 'rgba(201,162,75,0)');
+        ctx.fillStyle = grad;
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
+        ctx.fill();
+
+        // recycle when off-top or expired
+        if (p.y < -10 || p.life > p.maxLife) {
+          Object.assign(p, spawn(true));
+        }
+      }
+      raf = requestAnimationFrame(draw);
+    }
+
+    init();
+    draw();
+    let rt;
+    window.addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(init, 200); });
+
+    // Pause when hero not visible (save battery)
+    const hero = canvas.closest('.hero');
+    if (hero && 'IntersectionObserver' in window) {
+      new IntersectionObserver((entries) => {
+        entries.forEach(e => {
+          if (e.isIntersecting) { if (!raf) draw(); }
+          else { cancelAnimationFrame(raf); raf = null; }
+        });
+      }, { threshold: 0 }).observe(hero);
+    }
+  })();
+
   /* ============================================================
      MEDIA CAROUSEL
      To add content, edit the mediaItems array below.
