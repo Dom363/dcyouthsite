@@ -571,6 +571,47 @@
     .contact-methods { grid-template-columns: 1fr; }
   }
 
+  /* ── LIGHTBOX ── */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 2000;
+    background: rgba(6,11,16,0.94);
+    display: none; align-items: center; justify-content: center;
+    padding: 4vh 4vw;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox-content {
+    max-width: 100%; max-height: 92vh;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .lightbox-content img,
+  .lightbox-content video {
+    max-width: 100%; max-height: 92vh;
+    width: auto; height: auto;
+    border-radius: 4px;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.6);
+  }
+  .lightbox-close {
+    position: absolute; top: 1.2rem; right: 1.2rem;
+    width: 46px; height: 46px; border-radius: 50%;
+    background: rgba(11,18,25,0.8);
+    border: 1px solid rgba(201,162,75,0.4);
+    color: var(--parchment);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; transition: all 0.2s; z-index: 2001;
+  }
+  .lightbox-close:hover { background: rgba(201,162,75,0.25); border-color: var(--gold); }
+
+  /* "Tap to enlarge" affordance on enlargeable slides */
+  .expand-hint {
+    position: absolute; bottom: 0.9rem; right: 0.9rem; z-index: 4;
+    display: flex; align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 3px;
+    background: rgba(11,18,25,0.6);
+    border: 1px solid rgba(201,162,75,0.3);
+    color: var(--parchment);
+    pointer-events: none;
+  }
+
   /* ── FINAL CTA ── */
   .final-cta {
     text-align: center;
@@ -818,6 +859,14 @@
   <p class="footer-copy">Part of Dream Centre Church, Gold Coast &middot; <a href="/">Back to DC Youth</a></p>
 </footer>
 
+<!-- Lightbox for enlarging images and loop videos -->
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="lightbox-close" id="lightboxClose" aria-label="Close">
+    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <div class="lightbox-content" id="lightboxContent"></div>
+</div>
+
 <script>
   /* ── Hero embers: slow warm particles drifting up, forge/campfire feel ── */
   (function heroEmbers() {
@@ -1019,6 +1068,8 @@
         img.src = item.src; img.alt = 'Camp photo'; img.loading = 'lazy';
         img.className = 'slide-media';
         slide.appendChild(img);
+        slide.dataset.enlargeable = 'image';
+        addExpandHint(slide);
       } else if (item.type === 'loopvideo') {
         // Silent auto-looping clip, plays like an animation. Blurred fill behind.
         if (item.thumb) addBlur(slide, item.thumb);
@@ -1030,6 +1081,8 @@
         v.setAttribute('preload', 'metadata');
         if (item.thumb) v.poster = item.thumb;
         slide.appendChild(v);
+        slide.dataset.enlargeable = 'loopvideo';
+        addExpandHint(slide);
       } else {
         // video types: blurred fill from thumb, poster + play button, embed on demand
         let thumbSrc = item.thumb;
@@ -1054,6 +1107,14 @@
       blur.className = 'slide-blur';
       blur.style.backgroundImage = "url('" + src + "')";
       slide.appendChild(blur);
+    }
+
+    // Add a small "tap to enlarge" hint to enlargeable slides
+    function addExpandHint(slide) {
+      const hint = document.createElement('div');
+      hint.className = 'expand-hint';
+      hint.innerHTML = '<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>';
+      slide.appendChild(hint);
     }
 
     // Swap a video slide's poster for the actual embed and play it.
@@ -1247,8 +1308,28 @@
       // horizontal swipe only, and must be a deliberate distance
       if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
         if (dx < 0) next(); else prev();
+      } else if (Math.abs(dx) < 12 && Math.abs(dy) < 12) {
+        // a clean tap (not a swipe) → open lightbox if the active slide is enlargeable
+        maybeOpenLightbox(e.target);
       }
     }, { passive: true });
+
+    // Desktop click to enlarge (ignore clicks on arrows or the promo video)
+    stage.addEventListener('click', (e) => {
+      // touch devices already handled via touchend; avoid double-firing
+      if ('ontouchstart' in window) return;
+      maybeOpenLightbox(e.target);
+    });
+
+    function maybeOpenLightbox(target) {
+      // don't hijack taps on the arrows
+      if (target.closest && target.closest('.carousel-arrow')) return;
+      const slide = slides[current];
+      const kind = slide.dataset.enlargeable;
+      if (!kind) return; // only images and loop videos are enlargeable
+      const item = mediaItems[current];
+      openLightbox(kind, item);
+    }
 
     // Keyboard arrows when carousel focused
     stage.setAttribute('tabindex', '0');
@@ -1274,6 +1355,50 @@
       });
     }, { threshold: 0.55 });
     viewObserver.observe(stage);
+
+    // ── Lightbox ──
+    const lightbox = document.getElementById('lightbox');
+    const lightboxContent = document.getElementById('lightboxContent');
+    const lightboxClose = document.getElementById('lightboxClose');
+
+    function openLightbox(kind, item) {
+      if (!lightbox) return;
+      lightboxContent.innerHTML = '';
+      if (kind === 'image') {
+        const img = document.createElement('img');
+        img.src = item.src; img.alt = 'Camp photo';
+        lightboxContent.appendChild(img);
+      } else if (kind === 'loopvideo') {
+        const v = document.createElement('video');
+        v.src = item.src;
+        v.muted = true; v.loop = true; v.playsInline = true; v.autoplay = true;
+        v.setAttribute('muted', ''); v.setAttribute('playsinline', '');
+        v.setAttribute('controls', ''); // give controls in the enlarged view
+        lightboxContent.appendChild(v);
+        const p = v.play(); if (p && p.catch) p.catch(function(){});
+      }
+      lightbox.classList.add('open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox() {
+      if (!lightbox) return;
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      lightboxContent.innerHTML = ''; // stop any playing video
+      document.body.style.overflow = '';
+    }
+
+    if (lightbox) {
+      lightboxClose.addEventListener('click', closeLightbox);
+      lightbox.addEventListener('click', function (e) {
+        if (e.target === lightbox) closeLightbox(); // click backdrop to close
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && lightbox.classList.contains('open')) closeLightbox();
+      });
+    }
   })();
 
   // Scroll reveal
