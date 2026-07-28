@@ -340,6 +340,11 @@ body {
   transition: background 0.2s, transform 0.15s;
 }
 .event-action:hover { background: var(--green-mid); transform: translateY(-2px); }
+/* When used as a span inside a fully clickable card, follow the card's hover
+   instead of lifting on its own (the card already lifts). */
+span.event-action { cursor: pointer; }
+span.event-action:hover { transform: none; }
+.major-card:hover span.event-action { background: var(--green-mid); }
 /* Compact inline version for the what's on rows */
 .event-action-link {
   display: inline-block; margin-top: 0.5rem;
@@ -824,7 +829,8 @@ body {
           <span class="major-card-tag">Camp 2026</span>
           <div class="major-card-title">Kingdom Camp</div>
           <span class="major-card-date">28 Sep – 2 Oct 2026 &nbsp;·&nbsp; Mon to Fri</span>
-          <div class="major-card-desc" style="margin-top:0.75rem;">Four nights away at Bornhoffen. Adventure, worship and real community. Tap to find out more and register.</div>
+          <div class="major-card-desc" style="margin-top:0.75rem;">Four nights away at Bornhoffen. Adventure, worship and real community.</div>
+          <span class="event-action">Find out more</span>
         </div>
       </a>
 
