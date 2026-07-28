@@ -328,6 +328,29 @@ body {
 }
 .btn-outline:hover { border-color: var(--green-glow); color: var(--green-glow); }
 
+/* Event action button (from Zeal action_label / action_url) */
+.event-action {
+  display: inline-block; margin-top: 1rem;
+  background: var(--green); color: var(--green-pale);
+  font-family: var(--font-cond); font-weight: 700; font-size: 0.8rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 10px 22px; border-radius: 3px;
+  border: 1px solid var(--green-mid);
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s;
+}
+.event-action:hover { background: var(--green-mid); transform: translateY(-2px); }
+/* Compact inline version for the what's on rows */
+.event-action-link {
+  display: inline-block; margin-top: 0.5rem;
+  font-family: var(--font-cond); font-weight: 700; font-size: 0.75rem;
+  letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--green-glow); text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s;
+}
+.event-action-link:hover { border-bottom-color: var(--green-glow); }
+
 /* ── STATS BAR ── */
 .stats-bar {
   background: var(--dark2);
@@ -1103,6 +1126,33 @@ body {
     };
   }
 
+  // Escape text before it goes into markup
+  function escapeHtml(str) {
+    return String(str).replace(/[&<>"']/g, c => ({
+      '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+    })[c]);
+  }
+
+  // Second layer of defence on top of Zeal's server-side validation.
+  // Only absolute http/https URLs are allowed to reach an href.
+  function safeActionUrl(url) {
+    if (!url) return null;
+    try {
+      const u = new URL(url);
+      return (u.protocol === 'http:' || u.protocol === 'https:') ? u.href : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Build the action button markup for an event, or '' if it has no valid action
+  function actionMarkup(ev, className) {
+    const url = safeActionUrl(ev.action_url);
+    const label = (ev.action_label || '').trim();
+    if (!url || !label) return '';
+    return `<a href="${escapeHtml(url)}" class="${className}" target="_blank" rel="noopener noreferrer">${escapeHtml(label)}</a>`;
+  }
+
   function renderWhatsOn(events) {
     const list = document.getElementById('whats-on-list');
     if (!events.length) {
@@ -1127,6 +1177,7 @@ body {
           <div class="event-info">
             <h4>${headline}</h4>
             ${desc ? `<p>${desc}</p>` : ''}
+            ${actionMarkup(ev, 'event-action-link')}
           </div>
           <span class="event-badge ${badge.cls}" style="background:${colour.bg};color:${colour.accent};border-color:${colour.accent}44;">${badge.label}</span>
         </div>`;
@@ -1163,6 +1214,7 @@ body {
             <div class="major-card-title">${headline}</div>
             <span class="major-card-date">${day} ${month}</span>
             ${desc ? `<div class="major-card-desc" style="margin-top:0.5rem;">${desc}</div>` : ''}
+            ${actionMarkup(ev, 'event-action')}
           </div>
         </div>`;
     }).join('');
